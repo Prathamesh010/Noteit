@@ -5,13 +5,19 @@
   "dependencies": {
     "@emotion/react": "^11.7.0",
     "@emotion/styled": "^11.6.0",
+    "@mui/icons-material": "^5.2.0",
     "@mui/material": "^5.2.1",
+    "@mui/styles": "^5.2.1",
     "@reduxjs/toolkit": "^1.6.2",
     "@testing-library/jest-dom": "^5.15.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "@types/react": "^17.0.37",
     "@types/react-dom": "^17.0.11",
+    "@uiw/react-md-editor": "^3.8.2",
+    "draft-js": "^0.11.7",
+    "marked": "^4.0.5",
+    "mui-rte": "^2.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.6",
@@ -43,5 +49,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/marked": "^4.0.1"
   }
 }
