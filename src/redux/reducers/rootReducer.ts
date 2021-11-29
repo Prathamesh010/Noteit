@@ -1,14 +1,14 @@
-import { combineReducers, Reducer } from "redux";
-import appReducer from "./appReducer";
-import notesReducer from "./notesReducer";
-import themeReducer from "./themeReducer";
+import { combineReducers, Reducer } from 'redux'
+import appReducer from './appReducer'
+import notesReducer from './notesReducer'
+import themeReducer from './themeReducer'
 
 const rootReducer: Reducer = combineReducers({
-  notes: notesReducer,
-  theme: themeReducer,
-  app: appReducer,
-});
+	notes: notesReducer,
+	theme: themeReducer,
+	app: appReducer,
+})
 
-export type RootState = ReturnType<typeof rootReducer>;
+export type RootState = ReturnType<typeof rootReducer>
 
-export default rootReducer;
+export default rootReducer

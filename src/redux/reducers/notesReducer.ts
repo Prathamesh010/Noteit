@@ -1,51 +1,51 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { Note } from "../../common";
-import { getLocalStorage, setLocalStorage, uuid } from "../../common/utils";
+import { createSlice } from '@reduxjs/toolkit'
+import { Note } from '../../common'
+import { getLocalStorage, setLocalStorage, uuid } from '../../common/utils'
 
 interface noteState {
-  notes: Note[];
+	notes: Note[]
 }
 
 const initialState: noteState = {
-  notes: JSON.parse(getLocalStorage("notes")) || [],
-};
+	notes: JSON.parse(getLocalStorage('notes')) || [],
+}
 
 const notesReducer = createSlice({
-  name: "notes",
-  initialState: initialState,
-  reducers: {
-    addNote: (state, action) => {
-      const id: string = uuid();
-      const note: Note = {
-        id: id,
-        title: action.payload.title,
-        content: action.payload.content,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
-      setLocalStorage("notes", JSON.stringify([...state.notes, note]));
-      state.notes.push(note);
-    },
-    deleteNote: (state, action) => {
-      const note: Note = action.payload.note;
-      const noteIndex: number = state.notes.findIndex(
-        (res) => res.id === note.id
-      );
-      state.notes.splice(noteIndex, 1);
-      setLocalStorage("notes", JSON.stringify(state.notes));
-    },
-    editNote: (state, action) => {
-      const noteId: string = action.payload.id;
-      const noteIndex: number = state.notes.findIndex(
-        (note) => note.id === noteId
-      );
-      state.notes[noteIndex].title = action.payload.title;
-      state.notes[noteIndex].content = action.payload.content;
-      state.notes[noteIndex].updatedAt = new Date();
-      setLocalStorage("notes", JSON.stringify(state.notes));
-    },
-  },
-});
+	name: 'notes',
+	initialState: initialState,
+	reducers: {
+		addNote: (state, action) => {
+			const id: string = uuid()
+			const note: Note = {
+				id: id,
+				title: action.payload.title,
+				content: action.payload.content,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			}
+			setLocalStorage('notes', JSON.stringify([...state.notes, note]))
+			state.notes.push(note)
+		},
+		deleteNote: (state, action) => {
+			const note: Note = action.payload.note
+			const noteIndex: number = state.notes.findIndex(
+				(res) => res.id === note.id
+			)
+			state.notes.splice(noteIndex, 1)
+			setLocalStorage('notes', JSON.stringify(state.notes))
+		},
+		editNote: (state, action) => {
+			const noteId: string = action.payload.id
+			const noteIndex: number = state.notes.findIndex(
+				(note) => note.id === noteId
+			)
+			state.notes[noteIndex].title = action.payload.title
+			state.notes[noteIndex].content = action.payload.content
+			state.notes[noteIndex].updatedAt = new Date()
+			setLocalStorage('notes', JSON.stringify(state.notes))
+		},
+	},
+})
 
-export const { addNote, deleteNote, editNote } = notesReducer.actions;
-export default notesReducer.reducer;
+export const { addNote, deleteNote, editNote } = notesReducer.actions
+export default notesReducer.reducer

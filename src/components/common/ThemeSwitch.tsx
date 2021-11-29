@@ -1,5 +1,5 @@
-import { Switch } from '@mui/material';
-import { styled } from '@mui/system';
+import { Switch } from '@mui/material'
+import { styled } from '@mui/system'
 
 const ThemeSwitch = styled(Switch)(({ theme }) => ({
 	width: 62,
@@ -19,7 +19,8 @@ const ThemeSwitch = styled(Switch)(({ theme }) => ({
 			},
 			'& + .MuiSwitch-track': {
 				opacity: 1,
-				backgroundColor: theme.palette.mode === 'dark' ? '#8796A5' : '#aab4be',
+				backgroundColor:
+					theme.palette.mode === 'dark' ? '#8796A5' : '#aab4be',
 			},
 		},
 	},
@@ -46,6 +47,6 @@ const ThemeSwitch = styled(Switch)(({ theme }) => ({
 		backgroundColor: theme.palette.mode === 'dark' ? '#8796A5' : '#aab4be',
 		borderRadius: 20 / 2,
 	},
-}));
+}))
 
-export default ThemeSwitch;
+export default ThemeSwitch
