@@ -13,6 +13,7 @@ import { RootState } from "../../redux/reducers/rootReducer";
 import { Note } from "../../common";
 import NotesCard from "../common/NotesCard";
 import Preview from "../common/Preview";
+import { flash } from "../../redux/reducers/appReducer";
 
 const EmptyNote: Note = {
   id: "",
@@ -64,6 +65,13 @@ const Home = () => {
             content: text,
           })
         );
+
+    dispatch(
+      flash({
+        message: isEdit ? "Note updated" : "Note created",
+        type: "success",
+      })
+    );
   };
 
   const openEditor = () => {
@@ -77,6 +85,12 @@ const Home = () => {
     dispatch(
       deleteNote({
         note: note,
+      })
+    );
+    dispatch(
+      flash({
+        message: "Note deleted",
+        type: "success",
       })
     );
   };

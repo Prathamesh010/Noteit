@@ -17,7 +17,8 @@ const EditorTitle: FC<Props> = ({ title, setTitle }) => {
       ) : null}
       {showInput ? (
         <Input
-          onChange={(e) => setTitle(e.target.value)}
+          value={title === "Untitled" ? "" : title}
+          onChange={(e) => setTitle((e.target.value as string) || "Untitled")}
           onBlur={() => setShowInput(false)}
           autoFocus
         />
