@@ -9,14 +9,17 @@ import {
 } from "@mui/material";
 import { TransitionProps } from "@mui/material/transitions";
 import { Box } from "@mui/system";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import MDEditor from "@uiw/react-md-editor";
 import EditorTitle from "./EditorTitle";
+import { Note } from "../../common";
 
 interface EditorProps {
   open: boolean;
   onClose: () => void;
-  saveNote: (title: string, text: string | undefined) => void;
+  saveNote: (title: string, text: string, isEdit: boolean) => void;
+  note: Note;
+  isEdit: boolean;
 }
 
 const styles = {
@@ -41,12 +44,26 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const Editor: FC<EditorProps> = ({ open, onClose, saveNote }) => {
-  const [text, setText] = useState<string | undefined>("");
+const Editor: FC<EditorProps> = ({
+  open,
+  onClose,
+  saveNote,
+  note,
+  isEdit = false,
+}) => {
+  console.log("Editor.tsx: note: ", note, "isEdit: ", isEdit);
+  const [text, setText] = useState<string>("");
   const [title, setTitle] = useState<string>("Untitled");
 
+  useEffect(() => {
+    if (isEdit) {
+      setText(note.content);
+      setTitle(note.title);
+    }
+  }, [note, isEdit]);
+
   const onSave = () => {
-    saveNote(title, text);
+    saveNote(title, text, isEdit);
     resetState();
     onClose();
   };
@@ -90,7 +107,7 @@ const Editor: FC<EditorProps> = ({ open, onClose, saveNote }) => {
         <Box sx={styles.editorGrid}>
           <MDEditor
             value={text}
-            onChange={(val) => setText(val)}
+            onChange={(val) => setText(val || text)}
             height={650}
           />
         </Box>

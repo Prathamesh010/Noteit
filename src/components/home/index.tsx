@@ -4,7 +4,11 @@ import { useState } from "react";
 import { Box } from "@mui/system";
 import Editor from "../common/Editor";
 import { useDispatch, useSelector } from "react-redux";
-import { addNote } from "../../redux/reducers/notesReducer";
+import {
+  addNote,
+  deleteNote,
+  editNote,
+} from "../../redux/reducers/notesReducer";
 import { RootState } from "../../redux/reducers/rootReducer";
 import { Note } from "../../common";
 import NotesCard from "../common/NotesCard";
@@ -23,6 +27,7 @@ const Home = () => {
   const [open, setOpen] = useState(false);
   const [openPreview, setOpenPreview] = useState(false);
   const [note, setNote] = useState<Note>(EmptyNote);
+  const [isEdit, setIsEdit] = useState(false);
   const dispatch = useDispatch();
 
   const openNote = (noteId: string) => {
@@ -32,16 +37,50 @@ const Home = () => {
     setOpenPreview(true);
   };
 
-  const saveNote = (title: string, text: string | undefined) => {
-    if (text === undefined) return;
+  const closeEditor = () => {
+    setOpen(false);
+    setNote(EmptyNote);
+    setIsEdit(false);
+  };
 
+  const closePreview = () => {
+    setOpenPreview(false);
+    setNote(EmptyNote);
+  };
+
+  const saveNote = (title: string, text: string, isEdit: boolean) => {
+    if (text === undefined) return;
+    isEdit
+      ? dispatch(
+          editNote({
+            title: title,
+            content: text,
+            id: note.id,
+          })
+        )
+      : dispatch(
+          addNote({
+            title: title,
+            content: text,
+          })
+        );
+  };
+
+  const openEditor = () => {
+    setNote(note);
+    setIsEdit(true);
+    setOpen(true);
+    setOpenPreview(false);
+  };
+
+  const deleteNoteDispatch = () => {
     dispatch(
-      addNote({
-        title: title,
-        content: text,
+      deleteNote({
+        note: note,
       })
     );
   };
+
   return (
     <>
       <Box sx={{ display: "flex", flexDirection: "row-reverse" }}>
@@ -56,14 +95,22 @@ const Home = () => {
       </Box>
       <Box sx={{ display: "flex" }}>
         {notes.map((note) => (
-          <NotesCard note={note} openNote={openNote} />
+          <NotesCard note={note} openNote={openNote} key={note.id} />
         ))}
       </Box>
-      <Editor open={open} onClose={() => setOpen(false)} saveNote={saveNote} />
+      <Editor
+        open={open}
+        onClose={closeEditor}
+        saveNote={saveNote}
+        note={note}
+        isEdit={isEdit}
+      />
       <Preview
         note={note}
         open={openPreview}
-        onClose={() => setOpenPreview(false)}
+        onClose={closePreview}
+        openEditor={openEditor}
+        deleteNote={deleteNoteDispatch}
       />
     </>
   );

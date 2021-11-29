@@ -1,4 +1,4 @@
-import { Close, Edit } from "@mui/icons-material";
+import { Close, Delete, Edit } from "@mui/icons-material";
 import {
   Button,
   Dialog,
@@ -18,6 +18,8 @@ interface PreviewProps {
   note: Note;
   open: boolean;
   onClose: () => void;
+  openEditor: () => void;
+  deleteNote: () => void;
 }
 
 const Transition = React.forwardRef(function Transition(
@@ -29,7 +31,18 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const Preview: React.FC<PreviewProps> = ({ note, open, onClose }) => {
+const Preview: React.FC<PreviewProps> = ({
+  note,
+  open,
+  onClose,
+  openEditor,
+  deleteNote,
+}) => {
+  const onDelete = () => {
+    deleteNote();
+    onClose();
+  };
+
   return (
     <Dialog
       open={open}
@@ -45,9 +58,17 @@ const Preview: React.FC<PreviewProps> = ({ note, open, onClose }) => {
             variant="contained"
             startIcon={<Edit />}
             sx={{ mr: 2 }}
-            // onClick={onSave}
+            onClick={openEditor}
           >
             Edit
+          </Button>
+          <Button
+            variant="contained"
+            startIcon={<Delete />}
+            sx={{ mr: 2 }}
+            onClick={onDelete}
+          >
+            Delete
           </Button>
           <IconButton color="primary" onClick={onClose}>
             <Close />

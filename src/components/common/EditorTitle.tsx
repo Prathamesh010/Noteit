@@ -2,7 +2,7 @@ import { Input, Typography } from "@mui/material";
 import { FC, useState } from "react";
 
 interface Props {
-  title: string;
+  title: string | undefined;
   setTitle: (title: string) => void;
 }
 
