@@ -19,8 +19,9 @@ const Navbar: FC<NavbarProps> = (props) => {
 						variant="h6"
 						component="div"
 						sx={{ flexGrow: 1 }}
+						color="text.secondary"
 					>
-						Notes
+						Note it !
 					</Typography>
 					<ThemeSwitch
 						value="check"

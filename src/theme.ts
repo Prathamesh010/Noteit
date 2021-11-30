@@ -3,9 +3,9 @@ import { createTheme } from '@mui/material'
 export const lightTheme = createTheme({
 	palette: {
 		primary: {
-			main: '#5a4846',
+			main: '#d47e74',
 			light: '#797b7b',
-			dark: '#414141',
+			dark: '#8f3127',
 		},
 		secondary: {
 			main: '#4e4e4e',
@@ -18,6 +18,7 @@ export const lightTheme = createTheme({
 		},
 		text: {
 			primary: 'rgba(20,20,20,0.87)',
+			secondary: '#ffffff',
 		},
 	},
 })
@@ -25,9 +26,9 @@ export const lightTheme = createTheme({
 export const darkTheme = createTheme({
 	palette: {
 		primary: {
-			main: '#626262',
-			light: '#4a4a4a',
-			dark: '#252525',
+			main: '#e04e3d',
+			light: '#5F6368',
+			dark: '#61211a',
 		},
 		secondary: {
 			main: '#606060',
@@ -36,11 +37,11 @@ export const darkTheme = createTheme({
 		},
 		divider: 'rgba(243,241,241,0.12)',
 		background: {
-			paper: '#252525',
-			default: '#2b2b2b',
+			paper: '#202124',
+			default: '#202124',
 		},
 		text: {
-			secondary: 'rgba(220,217,217,0.7)',
+			secondary: '#ffffff',
 			primary: '#eaeaea',
 			disabled: 'rgba(218,214,214,0.5)',
 		},

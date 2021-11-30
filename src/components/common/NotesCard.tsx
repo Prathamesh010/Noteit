@@ -12,7 +12,14 @@ interface NotesCardProps {
 const NotesCard: FC<NotesCardProps> = ({ note, openNote, key }) => {
 	return (
 		<Card
-			sx={{ minWidth: 275, p: 2, m: 2 }}
+			sx={{
+				minWidth: 275,
+				p: 2,
+				m: 2,
+				border: '1px solid',
+				borderColor: 'primary.light',
+				borderRadius: '8px',
+			}}
 			onClick={() => openNote(note.id)}
 		>
 			<Typography variant="h5" gutterBottom>
