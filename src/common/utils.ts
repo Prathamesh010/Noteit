@@ -16,3 +16,29 @@ export function uuid(): string {
 		}
 	)
 }
+
+// function to convert IsoDate to Date and format it to string with format it with days ago or hours ago
+export function formatDate(date: string): string {
+	const dateObj = new Date(date)
+	const now = new Date()
+	const diff = now.getTime() - dateObj.getTime()
+	const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24))
+	const diffHours = Math.floor(diff / (1000 * 60 * 60))
+	const diffMinutes = Math.floor(diff / (1000 * 60))
+	const diffSeconds = Math.floor(diff / 1000)
+	if (diffDays > 0) {
+		return diffDays === 1 ? `${diffDays} day ago` : `${diffDays} days ago`
+	} else if (diffHours > 0) {
+		return diffHours === 1
+			? `${diffHours} hour ago`
+			: `${diffHours} hours ago`
+	} else if (diffMinutes > 0) {
+		return diffMinutes === 1
+			? `${diffMinutes} minute ago`
+			: `${diffMinutes} minutes ago`
+	} else if (diffSeconds > 0) {
+		return `few seconds ago`
+	} else {
+		return 'just now'
+	}
+}

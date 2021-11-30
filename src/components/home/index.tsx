@@ -107,7 +107,7 @@ const Home = () => {
 					New Note
 				</Button>
 			</Box>
-			<Box sx={{ display: 'flex' }}>
+			<Box sx={{ display: 'flex', flexWrap: 'wrap', mt: 3 }}>
 				{notes.map((note) => (
 					<NotesCard note={note} openNote={openNote} key={note.id} />
 				))}
