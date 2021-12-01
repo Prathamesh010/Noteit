@@ -51,7 +51,6 @@ const Editor: FC<EditorProps> = ({
 	note,
 	isEdit = false,
 }) => {
-	console.log('Editor.tsx: note: ', note, 'isEdit: ', isEdit)
 	const [text, setText] = useState<string>('')
 	const [title, setTitle] = useState<string>('Untitled')
 

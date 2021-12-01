@@ -6,10 +6,9 @@ import { formatDate } from '../../common/utils'
 interface NotesCardProps {
 	note: Note
 	openNote: (noteId: string) => void
-	key: string
 }
 
-const NotesCard: FC<NotesCardProps> = ({ note, openNote, key }) => {
+const NotesCard: FC<NotesCardProps> = ({ note, openNote }) => {
 	return (
 		<Card
 			sx={{

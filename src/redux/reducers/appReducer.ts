@@ -5,7 +5,7 @@ const appReducer = createSlice({
 	initialState: {
 		flash: {
 			message: '',
-			type: '',
+			type: 'success',
 			open: false,
 		},
 	},
