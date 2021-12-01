@@ -1,5 +1,5 @@
 {
-	"short_name": "React App",
+	"short_name": "Notes App",
 	"name": "Notes",
 	"start_url": ".",
 	"display": "standalone",
