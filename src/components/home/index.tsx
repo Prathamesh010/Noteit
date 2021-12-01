@@ -1,5 +1,5 @@
 import { Add } from '@mui/icons-material'
-import { Button, Grid } from '@mui/material'
+import { Button, Grid, Typography } from '@mui/material'
 import { useState } from 'react'
 import { Box } from '@mui/system'
 import Editor from '../common/Editor'
@@ -107,13 +107,26 @@ const Home = () => {
 					New Note
 				</Button>
 			</Box>
-			<Grid container sx={{ mt: 3 }}>
-				{notes.map((note) => (
-					<Grid item key={note.id} xs={12} md={6} lg={3}>
-						<NotesCard note={note} openNote={openNote} />
-					</Grid>
-				))}
-			</Grid>
+			{notes && notes.length > 0 ? (
+				<Grid container sx={{ mt: 3 }}>
+					{notes.map((note) => (
+						<Grid item key={note.id} xs={12} md={6} lg={3}>
+							<NotesCard note={note} openNote={openNote} />
+						</Grid>
+					))}
+				</Grid>
+			) : (
+				<Grid
+					container
+					spacing={0}
+					direction="column"
+					alignItems="center"
+					justifyContent="center"
+					sx={{ mt: 3 }}
+				>
+					<Typography variant="h5">No Notes Yet!</Typography>
+				</Grid>
+			)}
 			<Editor
 				open={open}
 				onClose={closeEditor}
