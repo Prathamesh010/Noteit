@@ -1,6 +1,6 @@
 {
 	"name": "notes",
-	"homepage": ".",
+	"homepage": "https://noteitpreview.netlify.app",
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
