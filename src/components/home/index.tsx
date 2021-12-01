@@ -124,7 +124,9 @@ const Home = () => {
 					justifyContent="center"
 					sx={{ mt: 3 }}
 				>
-					<Typography variant="h5">No Notes Yet!</Typography>
+					<Typography variant="h5" fontWeight="bold">
+						No Notes Yet!
+					</Typography>
 				</Grid>
 			)}
 			<Editor

@@ -21,6 +21,9 @@ export const lightTheme = createTheme({
 			secondary: '#ffffff',
 		},
 	},
+	typography: {
+		fontFamily: '"Roboto Condensed", "Helvetica", "Arial", sans-serif',
+	},
 })
 
 export const darkTheme = createTheme({
@@ -45,5 +48,8 @@ export const darkTheme = createTheme({
 			primary: '#eaeaea',
 			disabled: 'rgba(218,214,214,0.5)',
 		},
+	},
+	typography: {
+		fontFamily: '"Roboto Condensed", "Helvetica", "Arial", sans-serif',
 	},
 })
