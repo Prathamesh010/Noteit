@@ -13,6 +13,7 @@ import React, { FC, useEffect, useState } from 'react'
 import MDEditor from '@uiw/react-md-editor'
 import EditorTitle from './EditorTitle'
 import { Note } from '../../common'
+import { isMobile } from 'react-device-detect'
 
 interface EditorProps {
 	open: boolean
@@ -28,6 +29,7 @@ const styles = {
 	},
 	editorGrid: {
 		height: '100%',
+		mt: 1,
 	},
 	markdownRenderer: {
 		border: '1px solid #ccc',
@@ -108,6 +110,7 @@ const Editor: FC<EditorProps> = ({
 						value={text}
 						onChange={(val) => setText(val || text)}
 						height={650}
+						preview={isMobile ? 'edit' : 'live'}
 					/>
 				</Box>
 			</DialogContent>
