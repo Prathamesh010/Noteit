@@ -7,7 +7,7 @@ interface noteState {
 }
 
 const initialState: noteState = {
-	notes: JSON.parse(getLocalStorage('notes')) || [],
+	notes: JSON.parse(getLocalStorage('notes') || '[]'),
 }
 
 const notesReducer = createSlice({
