@@ -1,5 +1,5 @@
 import { Add } from '@mui/icons-material'
-import { Button } from '@mui/material'
+import { Button, Grid } from '@mui/material'
 import { useState } from 'react'
 import { Box } from '@mui/system'
 import Editor from '../common/Editor'
@@ -107,11 +107,13 @@ const Home = () => {
 					New Note
 				</Button>
 			</Box>
-			<Box sx={{ display: 'flex', flexWrap: 'wrap', mt: 3 }}>
+			<Grid container sx={{ mt: 3 }}>
 				{notes.map((note) => (
-					<NotesCard note={note} openNote={openNote} key={note.id} />
+					<Grid item key={note.id} xs={12} md={6} lg={3}>
+						<NotesCard note={note} openNote={openNote} />
+					</Grid>
 				))}
-			</Box>
+			</Grid>
 			<Editor
 				open={open}
 				onClose={closeEditor}

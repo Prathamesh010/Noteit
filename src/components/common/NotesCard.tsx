@@ -12,7 +12,6 @@ const NotesCard: FC<NotesCardProps> = ({ note, openNote }) => {
 	return (
 		<Card
 			sx={{
-				minWidth: 275,
 				p: 2,
 				m: 2,
 				border: '1px solid',
