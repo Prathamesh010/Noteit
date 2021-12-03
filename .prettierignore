@@ -13,3 +13,4 @@ cypress/plugins
 .husky
 public/
 README.md
+CODE_OF_CONDUCT.md
