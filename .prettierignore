@@ -9,3 +9,7 @@ cypress/downloads
 cypress/fixtures
 cypress/support
 cypress/plugins
+.github
+.husky
+public/
+README.md
