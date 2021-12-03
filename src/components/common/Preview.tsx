@@ -1,6 +1,5 @@
 import { Close, Delete, Edit } from '@mui/icons-material'
 import {
-	Button,
 	Dialog,
 	DialogContent,
 	DialogTitle,
@@ -13,6 +12,7 @@ import { Box } from '@mui/system'
 import MDEditor from '@uiw/react-md-editor'
 import React from 'react'
 import { Note } from '../../common'
+import ResponsiveButton from './ResponsiveButton'
 
 interface PreviewProps {
 	note: Note
@@ -54,22 +54,22 @@ const Preview: React.FC<PreviewProps> = ({
 				<Box sx={{ display: 'flex' }}>
 					<Typography variant="h6">{note.title}</Typography>
 					<Box sx={{ flexGrow: 1 }} />
-					<Button
+					<ResponsiveButton
 						variant="contained"
 						startIcon={<Edit />}
 						sx={{ mr: 2 }}
 						onClick={openEditor}
 					>
 						Edit
-					</Button>
-					<Button
+					</ResponsiveButton>
+					<ResponsiveButton
 						variant="contained"
 						startIcon={<Delete />}
 						sx={{ mr: 2 }}
 						onClick={onDelete}
 					>
 						Delete
-					</Button>
+					</ResponsiveButton>
 					<IconButton color="primary" onClick={onClose}>
 						<Close />
 					</IconButton>

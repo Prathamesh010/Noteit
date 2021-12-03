@@ -1,6 +1,5 @@
 import { Close, Save } from '@mui/icons-material'
 import {
-	Button,
 	Dialog,
 	DialogContent,
 	DialogTitle,
@@ -14,6 +13,7 @@ import MDEditor from '@uiw/react-md-editor'
 import EditorTitle from './EditorTitle'
 import { Note } from '../../common'
 import { isMobile } from 'react-device-detect'
+import ResponsiveButton from './ResponsiveButton'
 
 interface EditorProps {
 	open: boolean
@@ -85,14 +85,14 @@ const Editor: FC<EditorProps> = ({
 				<Box sx={styles.flex}>
 					<EditorTitle title={title} setTitle={setTitle} />
 					<Box sx={{ flexGrow: 1 }} />
-					<Button
+					<ResponsiveButton
 						variant="contained"
 						startIcon={<Save />}
 						sx={{ mr: 2 }}
 						onClick={onSave}
 					>
 						Save
-					</Button>
+					</ResponsiveButton>
 					<IconButton
 						color="primary"
 						onClick={() => {
