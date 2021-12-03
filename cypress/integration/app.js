@@ -9,12 +9,7 @@ describe('add a note', () => {
 	it('add a note', () => {
 		cy.visit('http://localhost:3000/')
 		cy.contains('Note it !')
-		cy.get('.MuiButton-root').click()
-		cy.get('.css-k008qs > .MuiTypography-root').click()
-		cy.get('.MuiInput-input').type('Test Note')
-		cy.get('.w-md-editor-text-input').type('# Test Note')
-		cy.get('.css-k008qs > .MuiButton-root').click()
-		cy.get('.MuiSnackbar-root > .MuiPaper-root').contains('Note created')
+		cy.addNote()
 	})
 })
 
@@ -23,12 +18,7 @@ describe('update a note', () => {
 		cy.visit('http://localhost:3000/')
 		cy.contains('Note it !')
 		// create a note
-		cy.get('.MuiButton-root').click()
-		cy.get('.css-k008qs > .MuiTypography-root').click()
-		cy.get('.MuiInput-input').type('Test Note')
-		cy.get('.w-md-editor-text-input').type('# Test Note')
-		cy.get('.css-k008qs > .MuiButton-root').click()
-		cy.get('.MuiSnackbar-root > .MuiPaper-root').contains('Note created')
+		cy.addNote()
 		// update the note
 		cy.get('.MuiGrid-root > .MuiPaper-root').click()
 		cy.get('.css-k008qs > :nth-child(3)').click()
@@ -45,12 +35,7 @@ describe('delete a note', () => {
 		cy.visit('http://localhost:3000/')
 		cy.contains('Note it !')
 		// create a note
-		cy.get('.MuiButton-root').click()
-		cy.get('.css-k008qs > .MuiTypography-root').click()
-		cy.get('.MuiInput-input').type('Test Note')
-		cy.get('.w-md-editor-text-input').type('# Test Note')
-		cy.get('.css-k008qs > .MuiButton-root').click()
-		cy.get('.MuiSnackbar-root > .MuiPaper-root').contains('Note created')
+		cy.addNote()
 		// delete the note
 		cy.get('.MuiGrid-root > .MuiPaper-root').click()
 		cy.get('.css-k008qs > :nth-child(4)').click()
