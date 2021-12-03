@@ -1,3 +1,5 @@
 # NotesApp
 
--   Basic Notes app to learn react-redux and typescript with testing
+-   Note-Taking app with Markdown support 
+-   Made with React, React-Redux and Typescript
+-   Cypress For End To End Testing
