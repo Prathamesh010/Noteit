@@ -76,7 +76,7 @@ const Preview: React.FC<PreviewProps> = ({
 				</Box>
 			</DialogTitle>
 			<DialogContent>
-				<MDEditor.Markdown source={note.content} />
+				<MDEditor.Markdown source={note.content} linkTarget="_blank" />
 			</DialogContent>
 		</Dialog>
 	)

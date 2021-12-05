@@ -111,6 +111,8 @@ const Editor: FC<EditorProps> = ({
 						onChange={(val) => setText(val || text)}
 						height={650}
 						preview={isMobile ? 'edit' : 'live'}
+						enableScroll={true}
+						tabSize={4}
 					/>
 				</Box>
 			</DialogContent>
