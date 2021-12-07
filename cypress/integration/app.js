@@ -50,8 +50,12 @@ describe('change theme', () => {
 		cy.get('.MuiSwitch-input')
 			.click()
 			.should(() => {
-				expect(localStorage.getItem('theme')).to.equal('dark')
+				expect(localStorage.getItem('theme')).to.equal('light')
 			})
-		cy.get('body').should('have.css', 'background-color', 'rgb(32, 33, 36)') // #202124
+		cy.get('body').should(
+			'have.css',
+			'background-color',
+			'rgb(250, 250, 250)'
+		) // #202124
 	})
 })
