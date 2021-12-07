@@ -4,7 +4,7 @@ import { getLocalStorage, setLocalStorage } from '../../common/utils'
 const themeReducer = createSlice({
 	name: 'theme',
 	initialState: {
-		theme: getLocalStorage('theme') || 'light',
+		theme: getLocalStorage('theme') || 'dark',
 	},
 	reducers: {
 		toggleTheme: (state) => {
