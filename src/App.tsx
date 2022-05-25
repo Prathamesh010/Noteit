@@ -7,21 +7,32 @@ import { darkTheme, lightTheme } from './theme'
 import Home from './components/home'
 import { RootState } from './redux/reducers/rootReducer'
 import FlashMessage from './components/common/FlashMessage'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import Login from './components/auth/login'
+import { initializeApp } from 'firebase/app'
+import firebaseConfig from './common/firebaseConfig'
 
 const App = () => {
 	const theme = useSelector((state: RootState) => state.theme.theme)
 	const dispatch = useDispatch()
+
+	initializeApp(firebaseConfig)
 	return (
 		<ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
-			<CssBaseline />
-			<FlashMessage />
-			<Navbar
-				theme={theme}
-				toggleTheme={() => {
-					dispatch(toggleTheme())
-				}}
-			/>
-			<Home />
+			<BrowserRouter>
+				<CssBaseline />
+				<FlashMessage />
+				<Navbar
+					theme={theme}
+					toggleTheme={() => {
+						dispatch(toggleTheme())
+					}}
+				/>
+				<Routes>
+					<Route path="/" element={<Home />} />
+					<Route path="/login" element={<Login />} />
+				</Routes>
+			</BrowserRouter>
 		</ThemeProvider>
 	)
 }
