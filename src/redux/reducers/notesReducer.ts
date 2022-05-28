@@ -1,13 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { Note } from '../../common'
-import { getLocalStorage, setLocalStorage, uuid } from '../../common/utils'
+import { uuid } from '../../common/utils'
 
 interface noteState {
 	notes: Note[]
 }
 
 const initialState: noteState = {
-	notes: JSON.parse(getLocalStorage('notes') || '[]'),
+	notes: JSON.parse(localStorage.getItem('notes') || '[]'),
 }
 
 const notesReducer = createSlice({
@@ -23,7 +23,10 @@ const notesReducer = createSlice({
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			}
-			setLocalStorage('notes', JSON.stringify([...state.notes, note]))
+			localStorage.setItem(
+				'notes',
+				JSON.stringify([...state.notes, note])
+			)
 			state.notes.push(note)
 		},
 		deleteNote: (state, action) => {
@@ -32,7 +35,7 @@ const notesReducer = createSlice({
 				(res) => res.id === note.id
 			)
 			state.notes.splice(noteIndex, 1)
-			setLocalStorage('notes', JSON.stringify(state.notes))
+			localStorage.setItem('notes', JSON.stringify(state.notes))
 		},
 		editNote: (state, action) => {
 			const noteId: string = action.payload.id
@@ -42,7 +45,7 @@ const notesReducer = createSlice({
 			state.notes[noteIndex].title = action.payload.title
 			state.notes[noteIndex].content = action.payload.content
 			state.notes[noteIndex].updatedAt = new Date()
-			setLocalStorage('notes', JSON.stringify(state.notes))
+			localStorage.setItem('notes', JSON.stringify(state.notes))
 		},
 	},
 })

@@ -1,31 +1,53 @@
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 import { Button } from '@mui/material'
+import { useLazyQuery } from '@apollo/client'
+import { LOGIN_USER } from '../../graphql/queries'
+import { loginUser } from '../../redux/reducers/authReducer'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { RootState } from '../../redux/reducers/rootReducer'
 
 const Login = () => {
-	const provider = new GoogleAuthProvider()
+	const dispatch = useDispatch()
+	const navigate = useNavigate()
+
+	const isAuthenticated = useSelector(
+		(state: RootState) => state.auth.isAuthenticated
+	)
+
+	if (isAuthenticated) {
+		navigate('/')
+	}
+
+	const [login, { loading, error }] = useLazyQuery(LOGIN_USER, {
+		onCompleted: (data) => {
+			dispatch(loginUser(data.login))
+			navigate('/')
+		},
+	})
 
 	const GoogleSignIn = () => {
+		const provider = new GoogleAuthProvider()
 		const auth = getAuth()
 		signInWithPopup(auth, provider)
 			.then((result) => {
 				const credential =
 					GoogleAuthProvider.credentialFromResult(result)
-				const accessToken = credential?.accessToken
-
-				if (accessToken) {
-					// post to server
-				} else {
-					console.log('Access token not found')
-				}
+				const token = credential?.accessToken
+				console.log(token)
+				login({ variables: { token } })
 			})
 			.catch((error) => {
 				console.log(error)
 			})
 	}
 
+	if (loading) return <p>Loading...</p>
+	if (error) return <p>Error: {error.message}</p>
+
 	return (
 		<div>
-			<Button onClick={GoogleSignIn}>Sign In With Google</Button>
+			<Button onClick={GoogleSignIn}>Google Sign In</Button>
 		</div>
 	)
 }
