@@ -11,17 +11,16 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Login from './components/auth/login'
 import { initializeApp } from 'firebase/app'
 import firebaseConfig from './common/firebaseConfig'
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
+import { ApolloProvider } from '@apollo/client'
+import createApolloClient from './apolloClient'
 
 const App = () => {
 	const theme = useSelector((state: RootState) => state.theme.theme)
 	const dispatch = useDispatch()
 
 	initializeApp(firebaseConfig)
-	const client = new ApolloClient({
-		uri: process.env.REACT_APP_GRAPHQL_ENDPOINT,
-		cache: new InMemoryCache(),
-	})
+
+	const client = createApolloClient()
 
 	return (
 		<ApolloProvider client={client}>

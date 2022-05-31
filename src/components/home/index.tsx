@@ -9,11 +9,13 @@ import {
 	deleteNote,
 	editNote,
 } from '../../redux/reducers/notesReducer'
-import { RootState } from '../../redux/reducers/rootReducer'
 import { Note } from '../../common'
 import NotesCard from '../common/NotesCard'
 import Preview from '../common/Preview'
 import { flash } from '../../redux/reducers/appReducer'
+import { useQuery } from '@apollo/client'
+import { GET_NOTES } from '../../graphql/queries'
+import { RootState } from '../../redux/reducers/rootReducer'
 
 const EmptyNote: Note = {
 	id: '',
@@ -24,15 +26,25 @@ const EmptyNote: Note = {
 }
 
 const Home = () => {
-	const notes: Note[] = useSelector((state: RootState) => state.notes).notes
+	const [notes, setNotes] = useState<Note[]>([])
 	const [open, setOpen] = useState(false)
 	const [openPreview, setOpenPreview] = useState(false)
 	const [note, setNote] = useState<Note>(EmptyNote)
 	const [isEdit, setIsEdit] = useState(false)
+
+	const { isAuthenticated } = useSelector((state: RootState) => state.auth)
+
 	const dispatch = useDispatch()
 
+	const { loading, error } = useQuery(GET_NOTES, {
+		onCompleted: (data) => {
+			setNotes(data.notes)
+		},
+		skip: !isAuthenticated,
+	})
+
 	const openNote = (noteId: string) => {
-		const result = notes.find((note) => note.id === noteId)
+		const result = notes.find((note: Note) => note.id === noteId)
 		if (!result) return
 		setNote(result)
 		setOpenPreview(true)
@@ -95,6 +107,15 @@ const Home = () => {
 		)
 	}
 
+	if (error) {
+		dispatch(
+			flash({
+				message: error.message,
+				type: 'error',
+			})
+		)
+	}
+
 	return (
 		<>
 			<Box sx={{ display: 'flex', flexDirection: 'row-reverse' }}>
@@ -109,7 +130,7 @@ const Home = () => {
 			</Box>
 			{notes && notes.length > 0 ? (
 				<Grid container sx={{ mt: 3 }}>
-					{notes.map((note) => (
+					{notes.map((note: Note) => (
 						<Grid item key={note.id} xs={12} md={6} lg={3}>
 							<NotesCard note={note} openNote={openNote} />
 						</Grid>
@@ -125,7 +146,7 @@ const Home = () => {
 					sx={{ mt: 3 }}
 				>
 					<Typography variant="h5" fontWeight="bold">
-						No Notes Yet!
+						{(loading && 'Loading...') || 'No notes found!'}
 					</Typography>
 				</Grid>
 			)}

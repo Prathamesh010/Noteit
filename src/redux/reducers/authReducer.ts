@@ -9,12 +9,9 @@ export const EmptyUser: User = {
 }
 
 const initialState = {
-	isAuthenticated: localStorage.getItem('user') !== null,
+	isAuthenticated: localStorage.getItem('accessToken') !== null,
 	accessToken: localStorage.getItem('accessToken') || '',
 	refreshToken: localStorage.getItem('refreshToken') || '',
-	user: localStorage.getItem('user')
-		? JSON.parse(localStorage.getItem('user') || '')
-		: EmptyUser,
 }
 
 const authReducer = createSlice({
@@ -25,10 +22,14 @@ const authReducer = createSlice({
 			state.isAuthenticated = true
 			state.accessToken = action.payload.accessToken
 			state.refreshToken = action.payload.refreshToken
-			state.user = action.payload.user
 			localStorage.setItem('accessToken', state.accessToken)
 			localStorage.setItem('refreshToken', state.refreshToken)
-			localStorage.setItem('user', JSON.stringify(state.user))
+		},
+		refreshToken: (state, action) => {
+			state.accessToken = action.payload.accessToken
+			state.refreshToken = action.payload.refreshToken
+			localStorage.setItem('accessToken', state.accessToken)
+			localStorage.setItem('refreshToken', state.refreshToken)
 		},
 		logoutUser: (state) => {
 			state = initialState
@@ -37,5 +38,5 @@ const authReducer = createSlice({
 	},
 })
 
-export const { loginUser, logoutUser } = authReducer.actions
+export const { loginUser, logoutUser, refreshToken } = authReducer.actions
 export default authReducer.reducer
