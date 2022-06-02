@@ -5,17 +5,19 @@ import { Box } from '@mui/system'
 import Editor from '../common/Editor'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-	addNote,
-	deleteNote,
-	editNote,
+	addNoteToCache,
+	deleteNoteFromCache,
+	editCacheNote,
+	setupNotes,
 } from '../../redux/reducers/notesReducer'
 import { Note } from '../../common'
 import NotesCard from '../common/NotesCard'
 import Preview from '../common/Preview'
 import { flash } from '../../redux/reducers/appReducer'
-import { useQuery } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
 import { GET_NOTES } from '../../graphql/queries'
 import { RootState } from '../../redux/reducers/rootReducer'
+import { CREATE_NOTE, DELETE_NOTE, UPDATE_NOTE } from '../../graphql/mutations'
 
 const EmptyNote: Note = {
 	id: '',
@@ -26,11 +28,17 @@ const EmptyNote: Note = {
 }
 
 const Home = () => {
-	const [notes, setNotes] = useState<Note[]>([])
+	const notes = useSelector((state: RootState) => state.notes.notes)
 	const [open, setOpen] = useState(false)
 	const [openPreview, setOpenPreview] = useState(false)
 	const [note, setNote] = useState<Note>(EmptyNote)
 	const [isEdit, setIsEdit] = useState(false)
+
+	const [editNote] = useMutation(UPDATE_NOTE)
+
+	const [createNote] = useMutation(CREATE_NOTE)
+
+	const [deleteNote] = useMutation(DELETE_NOTE)
 
 	const { isAuthenticated } = useSelector((state: RootState) => state.auth)
 
@@ -38,7 +46,7 @@ const Home = () => {
 
 	const { loading, error } = useQuery(GET_NOTES, {
 		onCompleted: (data) => {
-			setNotes(data.notes)
+			dispatch(setupNotes(data.notes))
 		},
 		skip: !isAuthenticated,
 	})
@@ -61,29 +69,48 @@ const Home = () => {
 		setNote(EmptyNote)
 	}
 
+	const editNoteTask = (title: string, content: string) => {
+		editNote({
+			variables: {
+				id: note.id,
+				title: title,
+				content: content,
+			},
+		})
+			.then((data) => data.data.updateNote)
+			.then((data) => {
+				dispatch(editCacheNote(data))
+				dispatch(
+					flash({
+						message: 'Note updated',
+						type: 'success',
+					})
+				)
+			})
+	}
+
+	const createNoteTask = (title: string, text: string) => {
+		createNote({
+			variables: {
+				title: title,
+				content: text,
+			},
+		})
+			.then((data) => data.data.createNote)
+			.then((data) => {
+				dispatch(addNoteToCache(data))
+				dispatch(
+					flash({
+						message: 'Note created',
+						type: 'success',
+					})
+				)
+			})
+	}
+
 	const saveNote = (title: string, text: string, isEdit: boolean) => {
 		if (text === undefined) return
-		isEdit
-			? dispatch(
-					editNote({
-						title: title,
-						content: text,
-						id: note.id,
-					})
-			  )
-			: dispatch(
-					addNote({
-						title: title,
-						content: text,
-					})
-			  )
-
-		dispatch(
-			flash({
-				message: isEdit ? 'Note updated' : 'Note created',
-				type: 'success',
-			})
-		)
+		isEdit ? editNoteTask(title, text) : createNoteTask(title, text)
 	}
 
 	const openEditor = () => {
@@ -94,17 +121,23 @@ const Home = () => {
 	}
 
 	const deleteNoteDispatch = () => {
-		dispatch(
-			deleteNote({
-				note: note,
-			})
-		)
-		dispatch(
-			flash({
-				message: 'Note deleted',
-				type: 'success',
-			})
-		)
+		deleteNote({
+			variables: {
+				id: note.id,
+			},
+		}).then(() => {
+			dispatch(
+				deleteNoteFromCache({
+					noteId: note.id,
+				})
+			)
+			dispatch(
+				flash({
+					message: 'Note deleted',
+					type: 'success',
+				})
+			)
+		})
 	}
 
 	if (error) {
