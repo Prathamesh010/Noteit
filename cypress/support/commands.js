@@ -24,9 +24,8 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 Cypress.Commands.add('addNote', (originalFn, url, options) => { 
-    cy.get('.MuiButton-root').click()
-	cy.get('.css-k008qs > .MuiTypography-root').click()
-	cy.get('.MuiInput-input').type('Test Note')
+	cy.get('.css-l256j9 > .MuiButton-root').click()
+	cy.get('.css-k008qs > .MuiTypography-root').type('Test Note')
 	cy.get('.w-md-editor-text-input').type('# Test Note')
 	cy.get('.css-k008qs > .MuiButton-root').click()
 	cy.get('.MuiSnackbar-root > .MuiPaper-root').contains('Note created')

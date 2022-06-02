@@ -55,7 +55,7 @@ describe('change theme', () => {
 		cy.get('body').should(
 			'have.css',
 			'background-color',
-			'rgb(250, 250, 250)'
+			'rgb(214, 214, 214)'
 		) // #202124
 	})
 })
