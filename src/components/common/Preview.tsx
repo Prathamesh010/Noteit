@@ -1,3 +1,4 @@
+import { useMutation } from '@apollo/client'
 import { Close, Delete, Edit } from '@mui/icons-material'
 import {
 	Dialog,
@@ -11,16 +12,19 @@ import { TransitionProps } from '@mui/material/transitions'
 import { Box } from '@mui/system'
 import MDEditor from '@uiw/react-md-editor'
 import React from 'react'
-import { Note } from '../../common'
+import { useDispatch, useSelector } from 'react-redux'
+import { DELETE_NOTE } from '../../graphql/mutations'
+import {
+	flash,
+	selectNote,
+	toggleEdit,
+	toggleEditor,
+	togglePreview,
+} from '../../redux/reducers/appReducer'
+import { deleteNoteFromCache } from '../../redux/reducers/notesReducer'
+import { RootState } from '../../redux/reducers/rootReducer'
+import { EmptyNote } from '../home'
 import ResponsiveButton from './ResponsiveButton'
-
-interface PreviewProps {
-	note: Note
-	open: boolean
-	onClose: () => void
-	openEditor: () => void
-	deleteNote: () => void
-}
 
 const Transition = React.forwardRef(function Transition(
 	props: TransitionProps & {
@@ -31,22 +35,51 @@ const Transition = React.forwardRef(function Transition(
 	return <Slide direction="up" ref={ref} {...props} />
 })
 
-const Preview: React.FC<PreviewProps> = ({
-	note,
-	open,
-	onClose,
-	openEditor,
-	deleteNote,
-}) => {
+const Preview: React.FC = () => {
+	const dispatch = useDispatch()
+	const note = useSelector((state: RootState) => state.app.selectedNote)
+	const isPreviewOpen = useSelector(
+		(state: RootState) => state.app.isPreviewOpen
+	)
+
+	const [deleteNote] = useMutation(DELETE_NOTE)
+
+	const closePreview = () => {
+		dispatch(togglePreview())
+		dispatch(selectNote(EmptyNote))
+	}
+
+	const openEditor = () => {
+		dispatch(toggleEdit())
+		dispatch(toggleEditor())
+		dispatch(togglePreview())
+	}
+
 	const onDelete = () => {
-		deleteNote()
-		onClose()
+		deleteNote({
+			variables: {
+				id: note.id,
+			},
+		}).then(() => {
+			dispatch(
+				deleteNoteFromCache({
+					noteId: note.id,
+				})
+			)
+			closePreview()
+			dispatch(
+				flash({
+					message: 'Note deleted',
+					type: 'success',
+				})
+			)
+		})
 	}
 
 	return (
 		<Dialog
-			open={open}
-			onClose={onClose}
+			open={isPreviewOpen}
+			onClose={closePreview}
 			fullScreen
 			TransitionComponent={Transition}
 		>
@@ -70,7 +103,7 @@ const Preview: React.FC<PreviewProps> = ({
 					>
 						Delete
 					</ResponsiveButton>
-					<IconButton color="primary" onClick={onClose}>
+					<IconButton color="primary" onClick={closePreview}>
 						<Close />
 					</IconButton>
 				</Box>

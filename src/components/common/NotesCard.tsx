@@ -5,10 +5,10 @@ import { formatDate } from '../../common/utils'
 
 interface NotesCardProps {
 	note: Note
-	openNote: (noteId: string) => void
+	onNoteClick: (noteId: string) => void
 }
 
-const NotesCard: FC<NotesCardProps> = ({ note, openNote }) => {
+const NotesCard: FC<NotesCardProps> = ({ note, onNoteClick }) => {
 	return (
 		<Card
 			sx={{
@@ -18,7 +18,7 @@ const NotesCard: FC<NotesCardProps> = ({ note, openNote }) => {
 				borderColor: 'primary.light',
 				borderRadius: '8px',
 			}}
-			onClick={() => openNote(note.id)}
+			onClick={() => onNoteClick(note.id)}
 		>
 			<Typography variant="h5" gutterBottom>
 				{note.title}

@@ -11,17 +11,24 @@ import { Box } from '@mui/system'
 import React, { FC, useEffect, useState } from 'react'
 import MDEditor from '@uiw/react-md-editor'
 import EditorTitle from './EditorTitle'
-import { Note } from '../../common'
 import { isMobile } from 'react-device-detect'
 import ResponsiveButton from './ResponsiveButton'
-
-interface EditorProps {
-	open: boolean
-	onClose: () => void
-	saveNote: (title: string, text: string, isEdit: boolean) => void
-	note: Note
-	isEdit: boolean
-}
+import { RootState } from '../../redux/reducers/rootReducer'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+	addNoteToCache,
+	editCacheNote,
+} from '../../redux/reducers/notesReducer'
+import {
+	flash,
+	selectNote,
+	toggleEdit,
+	toggleEditor,
+} from '../../redux/reducers/appReducer'
+import { Note } from '../../common'
+import { useMutation } from '@apollo/client'
+import { CREATE_NOTE, UPDATE_NOTE } from '../../graphql/mutations'
+import { EmptyNote } from '../home'
 
 const styles = {
 	flex: {
@@ -46,15 +53,24 @@ const Transition = React.forwardRef(function Transition(
 	return <Slide direction="up" ref={ref} {...props} />
 })
 
-const Editor: FC<EditorProps> = ({
-	open,
-	onClose,
-	saveNote,
-	note,
-	isEdit = false,
-}) => {
+const Editor: FC = () => {
+	const dispatch = useDispatch()
+	const note = useSelector((state: RootState) => state.app.selectedNote)
+	const isEditorOpen = useSelector(
+		(state: RootState) => state.app.isEditorOpen
+	)
+	const isEdit = useSelector((state: RootState) => state.app.isEdit)
 	const [text, setText] = useState<string>('')
 	const [title, setTitle] = useState<string>('Untitled')
+
+	const [editNote] = useMutation(UPDATE_NOTE)
+	const [createNote] = useMutation(CREATE_NOTE)
+
+	const onClose = () => {
+		dispatch(toggleEditor())
+		dispatch(selectNote(EmptyNote))
+		if (isEdit) dispatch(toggleEdit())
+	}
 
 	useEffect(() => {
 		if (isEdit) {
@@ -62,6 +78,50 @@ const Editor: FC<EditorProps> = ({
 			setTitle(note.title)
 		}
 	}, [note, isEdit])
+
+	const editNoteTask = (title: string, content: string) => {
+		editNote({
+			variables: {
+				id: note.id,
+				title: title,
+				content: content,
+			},
+		})
+			.then((data: any) => data.data.updateNote)
+			.then((data: Note) => {
+				dispatch(editCacheNote(data))
+				dispatch(
+					flash({
+						message: 'Note updated',
+						type: 'success',
+					})
+				)
+			})
+	}
+
+	const createNoteTask = (title: string, text: string) => {
+		createNote({
+			variables: {
+				title: title,
+				content: text,
+			},
+		})
+			.then((data: any) => data.data.createNote)
+			.then((data: Note) => {
+				dispatch(addNoteToCache(data))
+				dispatch(
+					flash({
+						message: 'Note created',
+						type: 'success',
+					})
+				)
+			})
+	}
+
+	const saveNote = (title: string, text: string, isEdit: boolean) => {
+		if (text === undefined) return
+		isEdit ? editNoteTask(title, text) : createNoteTask(title, text)
+	}
 
 	const onSave = () => {
 		saveNote(title, text, isEdit)
@@ -76,7 +136,7 @@ const Editor: FC<EditorProps> = ({
 
 	return (
 		<Dialog
-			open={open}
+			open={isEditorOpen}
 			onClose={onClose}
 			fullScreen
 			TransitionComponent={Transition}
