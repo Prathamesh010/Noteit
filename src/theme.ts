@@ -31,11 +31,11 @@ export const darkTheme = createTheme({
 		primary: {
 			main: '#474646',
 			light: '#5F6368',
-			dark: '#757575',
+			dark: '#b3afaf',
 		},
 		secondary: {
-			main: '#606060',
-			light: '#101010',
+			main: '#b8b6b6',
+			light: '#b8b6b6',
 			dark: '#000000',
 		},
 		divider: 'rgba(243,241,241,0.12)',
