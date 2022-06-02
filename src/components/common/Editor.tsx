@@ -1,5 +1,6 @@
 import { Close, Save } from '@mui/icons-material'
 import {
+	CircularProgress,
 	Dialog,
 	DialogContent,
 	DialogTitle,
@@ -55,21 +56,102 @@ const Transition = React.forwardRef(function Transition(
 
 const Editor: FC = () => {
 	const dispatch = useDispatch()
+
+	const isAuthenticated = useSelector(
+		(state: RootState) => state.auth.isAuthenticated
+	)
 	const note = useSelector((state: RootState) => state.app.selectedNote)
 	const isEditorOpen = useSelector(
 		(state: RootState) => state.app.isEditorOpen
 	)
 	const isEdit = useSelector((state: RootState) => state.app.isEdit)
+
 	const [text, setText] = useState<string>('')
 	const [title, setTitle] = useState<string>('Untitled')
 
-	const [editNote] = useMutation(UPDATE_NOTE)
-	const [createNote] = useMutation(CREATE_NOTE)
+	const [editNote, { loading: updateLoading, error: updateError }] =
+		useMutation(UPDATE_NOTE)
+	const [createNote, { loading: createLoading, error: createError }] =
+		useMutation(CREATE_NOTE)
 
 	const onClose = () => {
+		resetState()
 		dispatch(toggleEditor())
 		dispatch(selectNote(EmptyNote))
 		if (isEdit) dispatch(toggleEdit())
+	}
+
+	const onEditNote = (data: Note) => {
+		dispatch(editCacheNote(data))
+		dispatch(
+			flash({
+				message: 'Note updated',
+				type: 'success',
+			})
+		)
+		onClose()
+	}
+
+	const editNoteTask = () => {
+		if (isAuthenticated) {
+			editNote({
+				variables: {
+					id: note.id,
+					title: title,
+					content: text,
+				},
+				onCompleted: (data) => onEditNote(data.updateNote),
+			})
+		} else {
+			onEditNote({
+				id: note.id,
+				title: title,
+				content: text,
+				createdAt: note.createdAt,
+				updatedAt: new Date(),
+			})
+		}
+	}
+
+	const onCreateNote = (data: Note) => {
+		dispatch(addNoteToCache(data))
+		dispatch(
+			flash({
+				message: 'Note created',
+				type: 'success',
+			})
+		)
+		onClose()
+	}
+
+	const createNoteTask = () => {
+		if (isAuthenticated) {
+			createNote({
+				variables: {
+					title: title,
+					content: text,
+				},
+				onCompleted: (data) => onCreateNote(data.createNote),
+			})
+		} else {
+			onCreateNote({
+				id: '',
+				content: text,
+				title: title,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			})
+		}
+	}
+
+	const saveNote = () => {
+		if (text === undefined) return
+		isEdit ? editNoteTask() : createNoteTask()
+	}
+
+	const resetState = () => {
+		setText('')
+		setTitle('Untitled')
 	}
 
 	useEffect(() => {
@@ -79,59 +161,13 @@ const Editor: FC = () => {
 		}
 	}, [note, isEdit])
 
-	const editNoteTask = (title: string, content: string) => {
-		editNote({
-			variables: {
-				id: note.id,
-				title: title,
-				content: content,
-			},
-		})
-			.then((data: any) => data.data.updateNote)
-			.then((data: Note) => {
-				dispatch(editCacheNote(data))
-				dispatch(
-					flash({
-						message: 'Note updated',
-						type: 'success',
-					})
-				)
+	if (updateError || createError) {
+		dispatch(
+			flash({
+				message: 'Error saving note',
+				type: 'error',
 			})
-	}
-
-	const createNoteTask = (title: string, text: string) => {
-		createNote({
-			variables: {
-				title: title,
-				content: text,
-			},
-		})
-			.then((data: any) => data.data.createNote)
-			.then((data: Note) => {
-				dispatch(addNoteToCache(data))
-				dispatch(
-					flash({
-						message: 'Note created',
-						type: 'success',
-					})
-				)
-			})
-	}
-
-	const saveNote = (title: string, text: string, isEdit: boolean) => {
-		if (text === undefined) return
-		isEdit ? editNoteTask(title, text) : createNoteTask(title, text)
-	}
-
-	const onSave = () => {
-		saveNote(title, text, isEdit)
-		resetState()
-		onClose()
-	}
-
-	const resetState = () => {
-		setText('')
-		setTitle('Untitled')
+		)
 	}
 
 	return (
@@ -147,9 +183,15 @@ const Editor: FC = () => {
 					<Box sx={{ flexGrow: 1 }} />
 					<ResponsiveButton
 						variant="contained"
-						startIcon={<Save />}
+						startIcon={
+							updateLoading || createLoading ? (
+								<CircularProgress color="secondary" size={23} />
+							) : (
+								<Save />
+							)
+						}
 						sx={{ mr: 2 }}
-						onClick={onSave}
+						onClick={saveNote}
 					>
 						Save
 					</ResponsiveButton>
@@ -157,7 +199,6 @@ const Editor: FC = () => {
 						color="primary"
 						onClick={() => {
 							onClose()
-							resetState()
 						}}
 					>
 						<Close />

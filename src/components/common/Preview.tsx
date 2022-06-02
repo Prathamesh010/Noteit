@@ -1,6 +1,7 @@
 import { useMutation } from '@apollo/client'
 import { Close, Delete, Edit } from '@mui/icons-material'
 import {
+	CircularProgress,
 	Dialog,
 	DialogContent,
 	DialogTitle,
@@ -41,8 +42,11 @@ const Preview: React.FC = () => {
 	const isPreviewOpen = useSelector(
 		(state: RootState) => state.app.isPreviewOpen
 	)
+	const isAuthenticated = useSelector(
+		(state: RootState) => state.auth.isAuthenticated
+	)
 
-	const [deleteNote] = useMutation(DELETE_NOTE)
+	const [deleteNote, { loading, error }] = useMutation(DELETE_NOTE)
 
 	const closePreview = () => {
 		dispatch(togglePreview())
@@ -55,25 +59,39 @@ const Preview: React.FC = () => {
 		dispatch(togglePreview())
 	}
 
+	const deleteLocalNote = () => {
+		dispatch(
+			deleteNoteFromCache({
+				noteId: note.id,
+			})
+		)
+		closePreview()
+		dispatch(
+			flash({
+				message: 'Note deleted',
+				type: 'success',
+			})
+		)
+	}
+
 	const onDelete = () => {
-		deleteNote({
-			variables: {
-				id: note.id,
-			},
-		}).then(() => {
-			dispatch(
-				deleteNoteFromCache({
-					noteId: note.id,
-				})
-			)
-			closePreview()
-			dispatch(
-				flash({
-					message: 'Note deleted',
-					type: 'success',
-				})
-			)
-		})
+		if (isAuthenticated) {
+			deleteNote({
+				variables: {
+					id: note.id,
+				},
+				onCompleted: () => deleteLocalNote(),
+			})
+		} else deleteLocalNote()
+	}
+
+	if (error) {
+		dispatch(
+			flash({
+				message: 'Error deleting note',
+				type: 'error',
+			})
+		)
 	}
 
 	return (
@@ -97,7 +115,13 @@ const Preview: React.FC = () => {
 					</ResponsiveButton>
 					<ResponsiveButton
 						variant="contained"
-						startIcon={<Delete />}
+						startIcon={
+							loading ? (
+								<CircularProgress color="secondary" size={23} />
+							) : (
+								<Delete />
+							)
+						}
 						sx={{ mr: 2 }}
 						onClick={onDelete}
 					>

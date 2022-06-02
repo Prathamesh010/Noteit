@@ -43,7 +43,9 @@ const notesReducer = createSlice({
 			state.notes[noteIndex].updatedAt = action.payload.updatedAt
 			localStorage.setItem('notes', JSON.stringify(state.notes))
 		},
-		resetNoteState: () => initialState,
+		resetNoteState: (state) => {
+			state.notes = []
+		},
 	},
 })
 

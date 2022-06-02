@@ -33,7 +33,11 @@ const authReducer = createSlice({
 		},
 		logoutUser: (state) => {
 			localStorage.clear()
-			return initialState
+			return {
+				isAuthenticated: false,
+				accessToken: '',
+				refreshToken: '',
+			}
 		},
 	},
 })
