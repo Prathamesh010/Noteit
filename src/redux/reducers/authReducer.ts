@@ -32,8 +32,8 @@ const authReducer = createSlice({
 			localStorage.setItem('refreshToken', state.refreshToken)
 		},
 		logoutUser: (state) => {
-			state = initialState
 			localStorage.clear()
+			return initialState
 		},
 	},
 })

@@ -43,6 +43,7 @@ const notesReducer = createSlice({
 			state.notes[noteIndex].updatedAt = action.payload.updatedAt
 			localStorage.setItem('notes', JSON.stringify(state.notes))
 		},
+		resetNoteState: () => initialState,
 	},
 })
 
@@ -51,5 +52,6 @@ export const {
 	deleteNoteFromCache,
 	editCacheNote,
 	setupNotes,
+	resetNoteState,
 } = notesReducer.actions
 export default notesReducer.reducer
