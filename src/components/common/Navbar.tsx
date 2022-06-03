@@ -1,6 +1,7 @@
 import { AppBar, Toolbar, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { FC } from 'react'
+import { Link } from 'react-router-dom'
 import AuthAvatar from './AuthAvatar'
 
 import ThemeSwitch from './ThemeSwitch'
@@ -22,7 +23,12 @@ const Navbar: FC<NavbarProps> = (props) => {
 						sx={{ flexGrow: 1 }}
 						color="text.secondary"
 					>
-						Note it !
+						<Link
+							to="/"
+							style={{ textDecoration: 'none', color: '#FFF' }}
+						>
+							Note it !
+						</Link>
 					</Typography>
 					<ThemeSwitch
 						value="check"
