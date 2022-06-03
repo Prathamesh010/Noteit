@@ -158,6 +158,9 @@ const Editor: FC = () => {
 		if (isEdit) {
 			setText(note.content)
 			setTitle(note.title)
+		} else {
+			setText('')
+			setTitle('Untitled')
 		}
 	}, [note, isEdit])
 

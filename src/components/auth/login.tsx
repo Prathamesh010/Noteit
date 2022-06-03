@@ -6,6 +6,7 @@ import { loginUser } from '../../redux/reducers/authReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { RootState } from '../../redux/reducers/rootReducer'
+import { useEffect } from 'react'
 
 const Login = () => {
 	const dispatch = useDispatch()
@@ -15,14 +16,15 @@ const Login = () => {
 		(state: RootState) => state.auth.isAuthenticated
 	)
 
-	if (isAuthenticated) {
-		navigate('/')
-	}
+	useEffect(() => {
+		if (isAuthenticated) {
+			navigate('/')
+		}
+	}, [isAuthenticated, navigate])
 
 	const [login, { loading, error }] = useLazyQuery(LOGIN_USER, {
 		onCompleted: (data) => {
 			dispatch(loginUser(data.login))
-			navigate('/')
 		},
 	})
 
@@ -34,7 +36,6 @@ const Login = () => {
 				const credential =
 					GoogleAuthProvider.credentialFromResult(result)
 				const token = credential?.accessToken
-				console.log(token)
 				login({ variables: { token } })
 			})
 			.catch((error) => {
