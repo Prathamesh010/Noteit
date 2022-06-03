@@ -14,8 +14,7 @@ const EditorTitle: FC<Props> = ({ title, setTitle }) => {
 				<Typography variant="h6" onClick={() => setShowInput(true)}>
 					{title}
 				</Typography>
-			) : null}
-			{showInput ? (
+			) : (
 				<Input
 					value={title === 'Untitled' ? '' : title}
 					onChange={(e) =>
@@ -24,7 +23,7 @@ const EditorTitle: FC<Props> = ({ title, setTitle }) => {
 					onBlur={() => setShowInput(false)}
 					autoFocus
 				/>
-			) : null}
+			)}
 		</>
 	)
 }

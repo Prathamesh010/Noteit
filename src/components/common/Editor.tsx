@@ -1,5 +1,6 @@
 import { Close, Save } from '@mui/icons-material'
 import {
+	CircularProgress,
 	Dialog,
 	DialogContent,
 	DialogTitle,
@@ -11,17 +12,24 @@ import { Box } from '@mui/system'
 import React, { FC, useEffect, useState } from 'react'
 import MDEditor from '@uiw/react-md-editor'
 import EditorTitle from './EditorTitle'
-import { Note } from '../../common'
 import { isMobile } from 'react-device-detect'
 import ResponsiveButton from './ResponsiveButton'
-
-interface EditorProps {
-	open: boolean
-	onClose: () => void
-	saveNote: (title: string, text: string, isEdit: boolean) => void
-	note: Note
-	isEdit: boolean
-}
+import { RootState } from '../../redux/reducers/rootReducer'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+	addNoteToCache,
+	editCacheNote,
+} from '../../redux/reducers/notesReducer'
+import {
+	flash,
+	selectNote,
+	toggleEdit,
+	toggleEditor,
+} from '../../redux/reducers/appReducer'
+import { Note } from '../../common'
+import { useMutation } from '@apollo/client'
+import { CREATE_NOTE, UPDATE_NOTE } from '../../graphql/mutations'
+import { EmptyNote } from '../home'
 
 const styles = {
 	flex: {
@@ -46,27 +54,99 @@ const Transition = React.forwardRef(function Transition(
 	return <Slide direction="up" ref={ref} {...props} />
 })
 
-const Editor: FC<EditorProps> = ({
-	open,
-	onClose,
-	saveNote,
-	note,
-	isEdit = false,
-}) => {
+const Editor: FC = () => {
+	const dispatch = useDispatch()
+
+	const isAuthenticated = useSelector(
+		(state: RootState) => state.auth.isAuthenticated
+	)
+	const note = useSelector((state: RootState) => state.app.selectedNote)
+	const isEditorOpen = useSelector(
+		(state: RootState) => state.app.isEditorOpen
+	)
+	const isEdit = useSelector((state: RootState) => state.app.isEdit)
+
 	const [text, setText] = useState<string>('')
 	const [title, setTitle] = useState<string>('Untitled')
 
-	useEffect(() => {
-		if (isEdit) {
-			setText(note.content)
-			setTitle(note.title)
-		}
-	}, [note, isEdit])
+	const [editNote, { loading: updateLoading, error: updateError }] =
+		useMutation(UPDATE_NOTE)
+	const [createNote, { loading: createLoading, error: createError }] =
+		useMutation(CREATE_NOTE)
 
-	const onSave = () => {
-		saveNote(title, text, isEdit)
+	const onClose = () => {
 		resetState()
+		dispatch(toggleEditor())
+		dispatch(selectNote(EmptyNote))
+		if (isEdit) dispatch(toggleEdit())
+	}
+
+	const onEditNote = (data: Note) => {
+		dispatch(editCacheNote(data))
+		dispatch(
+			flash({
+				message: 'Note updated',
+				type: 'success',
+			})
+		)
 		onClose()
+	}
+
+	const editNoteTask = () => {
+		if (isAuthenticated) {
+			editNote({
+				variables: {
+					id: note.id,
+					title: title,
+					content: text,
+				},
+				onCompleted: (data) => onEditNote(data.updateNote),
+			})
+		} else {
+			onEditNote({
+				id: note.id,
+				title: title,
+				content: text,
+				createdAt: note.createdAt,
+				updatedAt: new Date(),
+			})
+		}
+	}
+
+	const onCreateNote = (data: Note) => {
+		dispatch(addNoteToCache(data))
+		dispatch(
+			flash({
+				message: 'Note created',
+				type: 'success',
+			})
+		)
+		onClose()
+	}
+
+	const createNoteTask = () => {
+		if (isAuthenticated) {
+			createNote({
+				variables: {
+					title: title,
+					content: text,
+				},
+				onCompleted: (data) => onCreateNote(data.createNote),
+			})
+		} else {
+			onCreateNote({
+				id: '',
+				content: text,
+				title: title,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			})
+		}
+	}
+
+	const saveNote = () => {
+		if (text === undefined) return
+		isEdit ? editNoteTask() : createNoteTask()
 	}
 
 	const resetState = () => {
@@ -74,9 +154,28 @@ const Editor: FC<EditorProps> = ({
 		setTitle('Untitled')
 	}
 
+	useEffect(() => {
+		if (isEdit) {
+			setText(note.content)
+			setTitle(note.title)
+		} else {
+			setText('')
+			setTitle('Untitled')
+		}
+	}, [note, isEdit])
+
+	if (updateError || createError) {
+		dispatch(
+			flash({
+				message: 'Error saving note',
+				type: 'error',
+			})
+		)
+	}
+
 	return (
 		<Dialog
-			open={open}
+			open={isEditorOpen}
 			onClose={onClose}
 			fullScreen
 			TransitionComponent={Transition}
@@ -87,9 +186,15 @@ const Editor: FC<EditorProps> = ({
 					<Box sx={{ flexGrow: 1 }} />
 					<ResponsiveButton
 						variant="contained"
-						startIcon={<Save />}
+						startIcon={
+							updateLoading || createLoading ? (
+								<CircularProgress color="secondary" size={23} />
+							) : (
+								<Save />
+							)
+						}
 						sx={{ mr: 2 }}
-						onClick={onSave}
+						onClick={saveNote}
 					>
 						Save
 					</ResponsiveButton>
@@ -97,7 +202,6 @@ const Editor: FC<EditorProps> = ({
 						color="primary"
 						onClick={() => {
 							onClose()
-							resetState()
 						}}
 					>
 						<Close />
