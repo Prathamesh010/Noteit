@@ -23,6 +23,14 @@ jobs:
           npm run build
           npm install -g serve
           
+      - name: Create env
+        run: |
+          touch .env
+          echo REACT_APP_GOOGLE_CLIENT_ID=${{ secrets.REACT_APP_GOOGLE_CLIENT_ID }} >> .env
+          echo REACT_APP_FIREBASE_API_KEY=${{ secrets.REACT_APP_FIREBASE_API_KEY }} >> .env
+          echo REACT_APP_GRAPHQL_ENDPOINT=${{ secrets.REACT_APP_GRAPHQL_ENDPOINT }} >> .env
+          cat .env
+          
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
