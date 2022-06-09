@@ -14,13 +14,13 @@ import firebaseConfig from './common/firebaseConfig'
 import { ApolloProvider } from '@apollo/client'
 import createApolloClient from './apolloClient'
 
+export const client = createApolloClient()
+
 const App = () => {
 	const theme = useSelector((state: RootState) => state.theme.theme)
 	const dispatch = useDispatch()
 
 	initializeApp(firebaseConfig)
-
-	const client = createApolloClient()
 
 	return (
 		<ApolloProvider client={client}>

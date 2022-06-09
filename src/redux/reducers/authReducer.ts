@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { client } from '../../App'
 import { User } from '../../common'
 
 export const EmptyUser: User = {
@@ -33,6 +34,7 @@ const authReducer = createSlice({
 		},
 		logoutUser: (state) => {
 			localStorage.clear()
+			client.resetStore()
 			return {
 				isAuthenticated: false,
 				accessToken: '',
