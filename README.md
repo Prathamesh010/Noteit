@@ -5,8 +5,15 @@
 <h4 align="center">
   Note-Taking App made using React.
 </h4>
+
 <p align="center">
-https://noteitpreview.netlify.app/
+  <a href="https://noteitpreview.netlify.app"><img src="https://img.shields.io/uptimerobot/status/m792262227-b7050af41e6980c8b0254cef?label=Site%20Status"></a>
+  <a href="./LICENCE"><img src="https://img.shields.io/github/license/Prathamesh010/NoteIt?color=blue"></a>
+  <a href="https://actions-badge.atrox.dev/Prathamesh010/Noteit/goto?ref=master"><img src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2FPrathamesh010%2FNoteit%2Fbadge%3Fref%3Dmaster&style=flat"></a>
+  <a href=""><img src="https://img.shields.io/netlify/728349dc-775f-4611-acf6-6ed3d9f8ab63?color=darkgreen"></a>
+ </p>
+<p align="center">
+  <a href="https://noteitpreview.netlify.app/">Try Now!</a>
 </p>
 
 # Preview
