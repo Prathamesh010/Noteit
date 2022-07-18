@@ -30,6 +30,8 @@ import { Note } from '../../common'
 import { useMutation } from '@apollo/client'
 import { CREATE_NOTE, UPDATE_NOTE } from '../../graphql/mutations'
 import { EmptyNote } from '../home'
+import { analytics } from '../../App'
+import { logEvent } from 'firebase/analytics'
 
 const styles = {
 	flex: {
@@ -74,13 +76,6 @@ const Editor: FC = () => {
 	const [createNote, { loading: createLoading, error: createError }] =
 		useMutation(CREATE_NOTE)
 
-	const onClose = () => {
-		resetState()
-		dispatch(toggleEditor())
-		dispatch(selectNote(EmptyNote))
-		if (isEdit) dispatch(toggleEdit())
-	}
-
 	const onEditNote = (data: Note) => {
 		dispatch(editCacheNote(data))
 		dispatch(
@@ -89,6 +84,10 @@ const Editor: FC = () => {
 				type: 'success',
 			})
 		)
+		logEvent(analytics, 'edit_note', {
+			noteId: note.id,
+			isAuthenticated: isAuthenticated,
+		})
 		onClose()
 	}
 
@@ -121,6 +120,9 @@ const Editor: FC = () => {
 				type: 'success',
 			})
 		)
+		logEvent(analytics, 'create_note', {
+			isAuthenticated: isAuthenticated,
+		})
 		onClose()
 	}
 
@@ -152,6 +154,13 @@ const Editor: FC = () => {
 	const resetState = () => {
 		setText('')
 		setTitle('Untitled')
+	}
+
+	const onClose = () => {
+		resetState()
+		dispatch(toggleEditor())
+		dispatch(selectNote(EmptyNote))
+		if (isEdit) dispatch(toggleEdit())
 	}
 
 	useEffect(() => {

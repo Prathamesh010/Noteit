@@ -10,17 +10,18 @@ import FlashMessage from './components/common/FlashMessage'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Login from './components/auth/login'
 import { initializeApp } from 'firebase/app'
+import { getAnalytics } from 'firebase/analytics'
 import firebaseConfig from './common/firebaseConfig'
 import { ApolloProvider } from '@apollo/client'
 import createApolloClient from './apolloClient'
 
 export const client = createApolloClient()
+const app = initializeApp(firebaseConfig)
+export const analytics = getAnalytics(app)
 
 const App = () => {
 	const theme = useSelector((state: RootState) => state.theme.theme)
 	const dispatch = useDispatch()
-
-	initializeApp(firebaseConfig)
 
 	return (
 		<ApolloProvider client={client}>
