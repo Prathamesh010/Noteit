@@ -1,4 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { setUserProperties } from 'firebase/analytics'
+import { analytics } from '../../App'
 
 const themeReducer = createSlice({
 	name: 'theme',
@@ -12,6 +14,7 @@ const themeReducer = createSlice({
 				state.theme === 'light' ? 'dark' : 'light'
 			)
 			state.theme = state.theme === 'light' ? 'dark' : 'light'
+			setUserProperties(analytics, { theme: state.theme })
 		},
 	},
 })

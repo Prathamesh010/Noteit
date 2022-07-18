@@ -14,6 +14,8 @@ import { Box } from '@mui/system'
 import MDEditor from '@uiw/react-md-editor'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { analytics } from '../../App'
+import { logEvent } from 'firebase/analytics'
 import { DELETE_NOTE } from '../../graphql/mutations'
 import {
 	flash,
@@ -72,6 +74,7 @@ const Preview: React.FC = () => {
 				type: 'success',
 			})
 		)
+		logEvent(analytics, 'delete_note')
 	}
 
 	const onDelete = () => {

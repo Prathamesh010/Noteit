@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom'
 import { RootState } from '../../redux/reducers/rootReducer'
 import { useEffect } from 'react'
 import { Google } from '@mui/icons-material'
+import { logEvent } from 'firebase/analytics'
+import { analytics } from '../../App'
 
 const Login = () => {
 	const dispatch = useDispatch()
@@ -19,6 +21,7 @@ const Login = () => {
 
 	useEffect(() => {
 		if (isAuthenticated) {
+			logEvent(analytics, 'login')
 			navigate('/')
 		}
 	}, [isAuthenticated, navigate])
