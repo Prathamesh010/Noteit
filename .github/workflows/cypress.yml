@@ -17,11 +17,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         
-      - name: Install and Build
+      - name: Install node_modules
         run: |
-          npm i
-          npm run build
-          npm install -g serve
+          npm ci
           
       - name: Create env
         run: |
@@ -34,7 +32,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          start: serve -s build
+          start: npm start
           wait-on: http://localhost:3000
           wait-on-timeout: 1200
           config: baseUrl=http://localhost:3000
