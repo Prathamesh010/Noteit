@@ -221,7 +221,7 @@ const Editor: FC = () => {
 				<Box sx={styles.editorGrid}>
 					<MDEditor
 						value={text}
-						onChange={(val) => setText(val || text)}
+						onChange={(val) => setText(val || '')}
 						height={650}
 						preview={isMobile ? 'edit' : 'live'}
 						enableScroll={true}
