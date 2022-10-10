@@ -28,9 +28,13 @@
   - [Cypress](https://www.cypress.io/) for end to end testing
   - [React-md-editor](https://github.com/uiwjs/react-md-editor)
 
-# Run Locally
- 1. `npm i`
- 2. `npm start`
+# Contributing:
+* Clone the repository and Run Locally
+  1. `npm i`
+  2. `npm start`
+
+* Run on Gitpod<br><br>
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/Prathamesh010/Noteit)
 
 ## License
   All the code available under the MIT license. See [LICENSE](https://github.com/Prathamesh010/Noteit/blob/master/LICENSE).
