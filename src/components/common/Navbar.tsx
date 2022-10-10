@@ -1,4 +1,5 @@
-import { AppBar, Toolbar, Typography } from '@mui/material'
+import { GitHub } from '@mui/icons-material'
+import { AppBar, IconButton, Toolbar, Tooltip, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { FC } from 'react'
 import { Link } from 'react-router-dom'
@@ -30,6 +31,22 @@ const Navbar: FC<NavbarProps> = (props) => {
 							Note it !
 						</Link>
 					</Typography>
+					<Tooltip title={`Leave a Star 🌟`} placement="bottom">
+						<IconButton
+							onClick={() => {
+								window.open(
+									'https://github.com/Prathamesh010/Noteit/',
+									'_blank'
+								)
+							}}
+							sx={{
+								marginLeft: '1rem',
+								color: '#FFF',
+							}}
+						>
+							<GitHub />
+						</IconButton>
+					</Tooltip>
 					<ThemeSwitch
 						value="check"
 						checked={theme === 'dark'}

@@ -1,8 +1,7 @@
 tasks:
-  - init: npm install
-    command: npm run start
+    - init: npm install
+      command: npm run start
 
 ports:
-  - port: 3000
-    onOpen: open-browser
-
+    - port: 3000
+      onOpen: open-browser
