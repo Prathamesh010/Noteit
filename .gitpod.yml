@@ -3,5 +3,5 @@ tasks:
       command: cp .env.example .env && npm run start
 
 ports:
-    - port: 3000
+    - port: 3001
       onOpen: open-browser
