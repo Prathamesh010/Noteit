@@ -1,49 +1,37 @@
+import { useQuery } from '@apollo/client'
 import { Add } from '@mui/icons-material'
 import { Button, Grid, Typography } from '@mui/material'
 import { Box } from '@mui/system'
-import Editor from '../common/Editor'
+import { Note } from 'common'
+import Editor from 'components/common/Editor'
+import NotesCard from 'components/common/NotesCard'
+import Preview from 'components/common/Preview'
+import { GET_NOTES } from 'graphql/queries'
 import { useDispatch, useSelector } from 'react-redux'
-import { setupNotes } from '../../redux/reducers/notesReducer'
-import { Note } from '../../common'
-import NotesCard from '../common/NotesCard'
-import Preview from '../common/Preview'
 import {
 	flash,
-	selectNote,
 	toggleEditor,
 	togglePreview,
-} from '../../redux/reducers/appReducer'
-import { useQuery } from '@apollo/client'
-import { GET_NOTES } from '../../graphql/queries'
-import { RootState } from '../../redux/reducers/rootReducer'
-
-export const EmptyNote: Note = {
-	id: '',
-	title: '',
-	content: '',
-	createdAt: new Date(),
-	updatedAt: new Date(),
-}
+} from 'redux/reducers/appReducer'
+import { selectNote, setupNotes } from 'redux/reducers/notesReducer'
+import { RootState } from 'redux/reducers/rootReducer'
 
 const Home = () => {
+	const dispatch = useDispatch()
+
 	const notes = useSelector((state: RootState) => state.notes.notes)
 
 	const { isAuthenticated } = useSelector((state: RootState) => state.auth)
 
-	const dispatch = useDispatch()
 
 	const { loading, error } = useQuery(GET_NOTES, {
-		onCompleted: (data) => {
-			dispatch(setupNotes(data.notes))
-		},
+		onCompleted: (data) => dispatch(setupNotes(data.notes)),
 		skip: !isAuthenticated,
 	})
 
 	const onNoteClick = (noteId: string) => {
-		const result = notes.find((note: Note) => note.id === noteId)
-		if (!result) return
-		dispatch(selectNote(result))
-		dispatch(togglePreview())
+		dispatch(selectNote(noteId));
+		dispatch(togglePreview());
 	}
 
 	if (error) {
@@ -76,14 +64,7 @@ const Home = () => {
 					))}
 				</Grid>
 			) : (
-				<Grid
-					container
-					spacing={0}
-					direction="column"
-					alignItems="center"
-					justifyContent="center"
-					sx={{ mt: 3 }}
-				>
+				<Grid container spacing={0} direction="column" alignItems="center" justifyContent="center" sx={{ mt: 3 }}>
 					<Typography variant="h5" fontWeight="bold">
 						{(loading && 'Loading...') || 'No notes found!'}
 					</Typography>

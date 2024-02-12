@@ -19,14 +19,12 @@ import { logEvent } from 'firebase/analytics'
 import { DELETE_NOTE } from '../../graphql/mutations'
 import {
 	flash,
-	selectNote,
 	toggleEdit,
 	toggleEditor,
 	togglePreview,
 } from '../../redux/reducers/appReducer'
 import { deleteNoteFromCache } from '../../redux/reducers/notesReducer'
 import { RootState } from '../../redux/reducers/rootReducer'
-import { EmptyNote } from '../home'
 import ResponsiveButton from './ResponsiveButton'
 
 const Transition = React.forwardRef(function Transition(
@@ -52,7 +50,6 @@ const Preview: React.FC = () => {
 
 	const closePreview = () => {
 		dispatch(togglePreview())
-		dispatch(selectNote(EmptyNote))
 	}
 
 	const openEditor = () => {

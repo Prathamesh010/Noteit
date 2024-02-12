@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { EmptyNote } from '../../components/home'
 
 const appReducer = createSlice({
 	name: 'app',
@@ -9,7 +8,6 @@ const appReducer = createSlice({
 			type: 'success',
 			open: false,
 		},
-		selectedNote: EmptyNote,
 		isPreviewOpen: false,
 		isEditorOpen: false,
 		isEdit: false,
@@ -22,9 +20,6 @@ const appReducer = createSlice({
 		},
 		closeFlash: (state) => {
 			state.flash.open = false
-		},
-		selectNote: (state, action) => {
-			state.selectedNote = action.payload
 		},
 		togglePreview: (state) => {
 			state.isPreviewOpen = !state.isPreviewOpen
@@ -41,7 +36,6 @@ const appReducer = createSlice({
 export const {
 	flash,
 	closeFlash,
-	selectNote,
 	togglePreview,
 	toggleEditor,
 	toggleEdit,

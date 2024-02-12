@@ -22,16 +22,15 @@ import {
 } from '../../redux/reducers/notesReducer'
 import {
 	flash,
-	selectNote,
 	toggleEdit,
 	toggleEditor,
 } from '../../redux/reducers/appReducer'
 import { Note } from '../../common'
 import { useMutation } from '@apollo/client'
 import { CREATE_NOTE, UPDATE_NOTE } from '../../graphql/mutations'
-import { EmptyNote } from '../home'
 import { analytics } from '../../App'
 import { logEvent } from 'firebase/analytics'
+import { EmptyNote } from 'common/constants'
 
 const styles = {
 	flex: {
@@ -159,7 +158,6 @@ const Editor: FC = () => {
 	const onClose = () => {
 		resetState()
 		dispatch(toggleEditor())
-		dispatch(selectNote(EmptyNote))
 		if (isEdit) dispatch(toggleEdit())
 	}
 

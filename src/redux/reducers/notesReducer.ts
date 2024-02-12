@@ -1,12 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { Note } from '../../common'
+import { EmptyNote } from 'common/constants'
 
 interface noteState {
-	notes: Note[]
+	notes: Note[],
+	selectedNote: Note
 }
 
 const initialState: noteState = {
 	notes: JSON.parse(localStorage.getItem('notes') || '[]'),
+	selectedNote: EmptyNote
 }
 
 const notesReducer = createSlice({
@@ -16,6 +19,10 @@ const notesReducer = createSlice({
 		setupNotes: (state, action) => {
 			state.notes = action.payload
 			localStorage.setItem('notes', JSON.stringify(state.notes))
+		},
+		selectNote: (state, action) => {
+			const note = state.notes.find(note => note.id === action.payload.noteId);
+			state.selectedNote = note as Note;
 		},
 		addNoteToCache: (state, action) => {
 			const note: Note = action.payload
@@ -55,5 +62,6 @@ export const {
 	editCacheNote,
 	setupNotes,
 	resetNoteState,
+	selectNote
 } = notesReducer.actions
 export default notesReducer.reducer
