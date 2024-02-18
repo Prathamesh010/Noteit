@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { setUserProperties } from 'firebase/analytics'
-import { analytics } from '../../App'
 
-const themeReducer = createSlice({
+import { analytics } from 'App'
+
+const themeSlice = createSlice({
 	name: 'theme',
 	initialState: {
 		theme: localStorage.getItem('theme') || 'dark',
@@ -19,5 +20,5 @@ const themeReducer = createSlice({
 	},
 })
 
-export const { toggleTheme } = themeReducer.actions
-export default themeReducer.reducer
+export const themeReducer = themeSlice.reducer
+export const { toggleTheme } = themeSlice.actions

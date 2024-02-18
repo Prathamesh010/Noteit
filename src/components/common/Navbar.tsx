@@ -3,16 +3,15 @@ import { AppBar, IconButton, Toolbar, Tooltip, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { FC } from 'react'
 import { Link } from 'react-router-dom'
-import AuthAvatar from './AuthAvatar'
 
-import ThemeSwitch from './ThemeSwitch'
+import { ThemeSwitch, AuthAvatar } from 'components/common'
 
 interface NavbarProps {
 	theme: string
 	toggleTheme: () => void
 }
 
-const Navbar: FC<NavbarProps> = (props) => {
+export const Navbar: FC<NavbarProps> = (props) => {
 	const { theme, toggleTheme } = props
 	return (
 		<Box sx={{ flexGrow: 1 }}>
@@ -58,5 +57,3 @@ const Navbar: FC<NavbarProps> = (props) => {
 		</Box>
 	)
 }
-
-export default Navbar

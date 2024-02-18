@@ -12,20 +12,21 @@ import {
 import { TransitionProps } from '@mui/material/transitions'
 import { Box } from '@mui/system'
 import MDEditor from '@uiw/react-md-editor'
+import { logEvent } from 'firebase/analytics'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { analytics } from '../../App'
-import { logEvent } from 'firebase/analytics'
-import { DELETE_NOTE } from '../../graphql/mutations'
+
+import { analytics } from 'App'
+import { ResponsiveButton } from 'components/common'
+import { DELETE_NOTE } from 'graphql/mutations'
 import {
 	flash,
 	toggleEdit,
 	toggleEditor,
 	togglePreview,
-} from '../../redux/reducers/appReducer'
-import { deleteNoteFromCache } from '../../redux/reducers/notesReducer'
-import { RootState } from '../../redux/reducers/rootReducer'
-import ResponsiveButton from './ResponsiveButton'
+} from 'redux/reducers/appReducer'
+import { deleteNoteFromCache } from 'redux/reducers/notesReducer'
+import { RootState } from 'redux/reducers/rootReducer'
 
 const Transition = React.forwardRef(function Transition(
 	props: TransitionProps & {
@@ -36,9 +37,9 @@ const Transition = React.forwardRef(function Transition(
 	return <Slide direction="up" ref={ref} {...props} />
 })
 
-const Preview: React.FC = () => {
+export const Preview: React.FC = () => {
 	const dispatch = useDispatch()
-	const note = useSelector((state: RootState) => state.app.selectedNote)
+	const note = useSelector((state: RootState) => state.notes.selectedNote)
 	const isPreviewOpen = useSelector(
 		(state: RootState) => state.app.isPreviewOpen
 	)
@@ -48,9 +49,7 @@ const Preview: React.FC = () => {
 
 	const [deleteNote, { loading, error }] = useMutation(DELETE_NOTE)
 
-	const closePreview = () => {
-		dispatch(togglePreview())
-	}
+	const closePreview = () => dispatch(togglePreview())
 
 	const openEditor = () => {
 		dispatch(toggleEdit())
@@ -138,5 +137,3 @@ const Preview: React.FC = () => {
 		</Dialog>
 	)
 }
-
-export default Preview

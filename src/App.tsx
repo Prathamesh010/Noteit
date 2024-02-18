@@ -1,19 +1,17 @@
-import './App.css'
-import { useDispatch, useSelector } from 'react-redux'
-import Navbar from './components/common/Navbar'
-import { toggleTheme } from './redux/reducers/themeReducer'
-import { CssBaseline, ThemeProvider } from '@mui/material'
-import { darkTheme, lightTheme } from './theme'
-import Home from './components/home'
-import { RootState } from './redux/reducers/rootReducer'
-import FlashMessage from './components/common/FlashMessage'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import Login from './components/auth/login'
-import { initializeApp } from 'firebase/app'
-import { getAnalytics } from 'firebase/analytics'
-import firebaseConfig from './common/firebaseConfig'
 import { ApolloProvider } from '@apollo/client'
-import createApolloClient from './apolloClient'
+import firebaseConfig from 'common/firebaseConfig'
+import Login from 'components/auth/login'
+import { FlashMessage, Navbar } from 'components/common'
+import Home from 'components/home'
+import { CssBaseline, ThemeProvider } from '@mui/material'
+import createApolloClient from 'apolloClient'
+import { getAnalytics } from 'firebase/analytics'
+import { initializeApp } from 'firebase/app'
+import { useDispatch, useSelector } from 'react-redux'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { darkTheme, lightTheme } from 'theme'
+import 'App.css'
+import { RootState, toggleTheme } from 'redux/reducers'
 
 export const client = createApolloClient()
 const app = initializeApp(firebaseConfig)
@@ -31,9 +29,7 @@ const App = () => {
 					<FlashMessage />
 					<Navbar
 						theme={theme}
-						toggleTheme={() => {
-							dispatch(toggleTheme())
-						}}
+						toggleTheme={() => dispatch(toggleTheme())}
 					/>
 					<Routes>
 						<Route path="/" element={<Home />} />

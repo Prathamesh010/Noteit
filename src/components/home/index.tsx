@@ -2,17 +2,12 @@ import { useQuery } from '@apollo/client'
 import { Add } from '@mui/icons-material'
 import { Button, Grid, Typography } from '@mui/material'
 import { Box } from '@mui/system'
-import { Note } from 'common'
-import Editor from 'components/common/Editor'
-import NotesCard from 'components/common/NotesCard'
-import Preview from 'components/common/Preview'
-import { GET_NOTES } from 'graphql/queries'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-	flash,
-	toggleEditor,
-	togglePreview,
-} from 'redux/reducers/appReducer'
+
+import { Note } from 'common/models'
+import { Editor, NotesCard, Preview } from 'components/common'
+import { GET_NOTES } from 'graphql/queries'
+import { flash, toggleEditor, togglePreview } from 'redux/reducers/appReducer'
 import { selectNote, setupNotes } from 'redux/reducers/notesReducer'
 import { RootState } from 'redux/reducers/rootReducer'
 
@@ -23,15 +18,14 @@ const Home = () => {
 
 	const { isAuthenticated } = useSelector((state: RootState) => state.auth)
 
-
 	const { loading, error } = useQuery(GET_NOTES, {
 		onCompleted: (data) => dispatch(setupNotes(data.notes)),
 		skip: !isAuthenticated,
 	})
 
 	const onNoteClick = (noteId: string) => {
-		dispatch(selectNote(noteId));
-		dispatch(togglePreview());
+		dispatch(selectNote(noteId))
+		dispatch(togglePreview())
 	}
 
 	if (error) {
@@ -64,7 +58,14 @@ const Home = () => {
 					))}
 				</Grid>
 			) : (
-				<Grid container spacing={0} direction="column" alignItems="center" justifyContent="center" sx={{ mt: 3 }}>
+				<Grid
+					container
+					spacing={0}
+					direction="column"
+					alignItems="center"
+					justifyContent="center"
+					sx={{ mt: 3 }}
+				>
 					<Typography variant="h5" fontWeight="bold">
 						{(loading && 'Loading...') || 'No notes found!'}
 					</Typography>

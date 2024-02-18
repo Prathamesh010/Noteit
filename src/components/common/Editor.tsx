@@ -1,3 +1,4 @@
+import { useMutation } from '@apollo/client'
 import { Close, Save } from '@mui/icons-material'
 import {
 	CircularProgress,
@@ -9,28 +10,20 @@ import {
 } from '@mui/material'
 import { TransitionProps } from '@mui/material/transitions'
 import { Box } from '@mui/system'
-import React, { FC, useEffect, useState } from 'react'
 import MDEditor from '@uiw/react-md-editor'
-import EditorTitle from './EditorTitle'
-import { isMobile } from 'react-device-detect'
-import ResponsiveButton from './ResponsiveButton'
-import { RootState } from '../../redux/reducers/rootReducer'
-import { useDispatch, useSelector } from 'react-redux'
-import {
-	addNoteToCache,
-	editCacheNote,
-} from '../../redux/reducers/notesReducer'
-import {
-	flash,
-	toggleEdit,
-	toggleEditor,
-} from '../../redux/reducers/appReducer'
-import { Note } from '../../common'
-import { useMutation } from '@apollo/client'
-import { CREATE_NOTE, UPDATE_NOTE } from '../../graphql/mutations'
-import { analytics } from '../../App'
+import { analytics } from 'App'
 import { logEvent } from 'firebase/analytics'
-import { EmptyNote } from 'common/constants'
+import React, { FC, useEffect, useState } from 'react'
+import { isMobile } from 'react-device-detect'
+import { useDispatch, useSelector } from 'react-redux'
+import { v4 as uuid } from 'uuid'
+
+import { Note } from 'common/models'
+import { EditorTitle, ResponsiveButton } from 'components/common'
+import { CREATE_NOTE, UPDATE_NOTE } from 'graphql/mutations'
+import { flash, toggleEdit, toggleEditor } from 'redux/reducers/appReducer'
+import { addNoteToCache, editCacheNote } from 'redux/reducers/notesReducer'
+import { RootState } from 'redux/reducers/rootReducer'
 
 const styles = {
 	flex: {
@@ -55,13 +48,13 @@ const Transition = React.forwardRef(function Transition(
 	return <Slide direction="up" ref={ref} {...props} />
 })
 
-const Editor: FC = () => {
+export const Editor: FC = () => {
 	const dispatch = useDispatch()
 
 	const isAuthenticated = useSelector(
 		(state: RootState) => state.auth.isAuthenticated
 	)
-	const note = useSelector((state: RootState) => state.app.selectedNote)
+	const note = useSelector((state: RootState) => state.notes.selectedNote)
 	const isEditorOpen = useSelector(
 		(state: RootState) => state.app.isEditorOpen
 	)
@@ -136,7 +129,7 @@ const Editor: FC = () => {
 			})
 		} else {
 			onCreateNote({
-				id: '',
+				id: uuid(),
 				content: text,
 				title: title,
 				createdAt: new Date(),
@@ -230,5 +223,3 @@ const Editor: FC = () => {
 		</Dialog>
 	)
 }
-
-export default Editor

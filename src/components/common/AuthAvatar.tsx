@@ -11,12 +11,13 @@ import {
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { GET_PROFILE_PIC } from '../../graphql/queries'
-import { logoutUser } from '../../redux/reducers/authReducer'
-import { resetNoteState } from '../../redux/reducers/notesReducer'
-import { RootState } from '../../redux/reducers/rootReducer'
 
-const AuthAvatar = () => {
+import { GET_PROFILE_PIC } from 'graphql/queries'
+import { RootState } from 'redux/reducers/rootReducer'
+import { logoutUser } from 'redux/reducers/authReducer'
+import { resetNoteState } from 'redux/reducers/notesReducer'
+
+export const AuthAvatar = () => {
 	const dispatch = useDispatch()
 	const { isAuthenticated } = useSelector((state: RootState) => state.auth)
 	const { data } = useQuery(GET_PROFILE_PIC, {
@@ -118,5 +119,3 @@ const AuthAvatar = () => {
 		</>
 	)
 }
-
-export default AuthAvatar

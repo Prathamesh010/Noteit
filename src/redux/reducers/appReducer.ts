@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-const appReducer = createSlice({
+const appSlice = createSlice({
 	name: 'app',
 	initialState: {
 		flash: {
@@ -33,11 +33,6 @@ const appReducer = createSlice({
 	},
 })
 
-export const {
-	flash,
-	closeFlash,
-	togglePreview,
-	toggleEditor,
-	toggleEdit,
-} = appReducer.actions
-export default appReducer.reducer
+export const appReducer = appSlice.reducer
+export const { flash, closeFlash, togglePreview, toggleEditor, toggleEdit } =
+	appSlice.actions

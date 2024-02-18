@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { client } from '../../App'
-import { User } from '../../common'
+import { client } from 'App'
+import { User } from 'common/models'
 
 export const EmptyUser: User = {
 	id: '',
@@ -15,7 +15,7 @@ const initialState = {
 	refreshToken: localStorage.getItem('refreshToken') || '',
 }
 
-const authReducer = createSlice({
+const authSlice = createSlice({
 	name: 'auth',
 	initialState: initialState,
 	reducers: {
@@ -44,5 +44,5 @@ const authReducer = createSlice({
 	},
 })
 
-export const { loginUser, logoutUser, refreshToken } = authReducer.actions
-export default authReducer.reducer
+export const authReducer = authSlice.reducer
+export const { loginUser, logoutUser, refreshToken } = authSlice.actions

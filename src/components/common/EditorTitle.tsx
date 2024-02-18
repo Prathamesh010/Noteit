@@ -6,7 +6,7 @@ interface Props {
 	setTitle: (title: string) => void
 }
 
-const EditorTitle: FC<Props> = ({ title, setTitle }) => {
+export const EditorTitle: FC<Props> = ({ title, setTitle }) => {
 	const [showInput, setShowInput] = useState(false)
 	return (
 		<>
@@ -27,5 +27,3 @@ const EditorTitle: FC<Props> = ({ title, setTitle }) => {
 		</>
 	)
 }
-
-export default EditorTitle

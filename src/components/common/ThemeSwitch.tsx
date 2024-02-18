@@ -1,7 +1,7 @@
 import { Switch } from '@mui/material'
 import { styled } from '@mui/system'
 
-const ThemeSwitch = styled(Switch)(({ theme }) => ({
+export const ThemeSwitch = styled(Switch)(({ theme }) => ({
 	width: 62,
 	height: 34,
 	padding: 7,
@@ -48,5 +48,3 @@ const ThemeSwitch = styled(Switch)(({ theme }) => ({
 		borderRadius: 20 / 2,
 	},
 }))
-
-export default ThemeSwitch

@@ -1,14 +1,15 @@
 import { Card, Typography } from '@mui/material'
+import moment from 'moment'
 import { FC } from 'react'
-import { Note } from '../../common'
-import { formatDate } from '../../common/utils'
+
+import { Note } from 'common/models'
 
 interface NotesCardProps {
 	note: Note
 	onNoteClick: (noteId: string) => void
 }
 
-const NotesCard: FC<NotesCardProps> = ({ note, onNoteClick }) => {
+export const NotesCard: FC<NotesCardProps> = ({ note, onNoteClick }) => {
 	return (
 		<Card
 			sx={{
@@ -24,10 +25,8 @@ const NotesCard: FC<NotesCardProps> = ({ note, onNoteClick }) => {
 				{note.title}
 			</Typography>
 			<Typography variant="subtitle2" gutterBottom>
-				Edited {formatDate(note.updatedAt.toString())}
+				Edited {moment(note.updatedAt.toString()).fromNow()}
 			</Typography>
 		</Card>
 	)
 }
-
-export default NotesCard

@@ -1,15 +1,16 @@
-import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
-import { Button, Grid } from '@mui/material'
 import { useLazyQuery } from '@apollo/client'
-import { LOGIN_USER } from '../../graphql/queries'
-import { loginUser } from '../../redux/reducers/authReducer'
+import { Google } from '@mui/icons-material'
+import { Button, Grid } from '@mui/material'
+import { analytics } from 'App'
+import { logEvent } from 'firebase/analytics'
+import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { RootState } from '../../redux/reducers/rootReducer'
-import { useEffect } from 'react'
-import { Google } from '@mui/icons-material'
-import { logEvent } from 'firebase/analytics'
-import { analytics } from '../../App'
+
+import { LOGIN_USER } from 'graphql/queries'
+import { loginUser } from 'redux/reducers/authReducer'
+import { RootState } from 'redux/reducers/rootReducer'
 
 const Login = () => {
 	const dispatch = useDispatch()

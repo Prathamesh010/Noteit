@@ -1,7 +1,7 @@
 import { Button, IconButton, useMediaQuery, useTheme } from '@mui/material'
 import { FC } from 'react'
 
-const ResponsiveButton: FC<any> = ({ children, ...props }) => {
+export const ResponsiveButton: FC<any> = ({ children, ...props }) => {
 	const theme = useTheme()
 	const desktop = useMediaQuery(theme.breakpoints.up('lg'))
 	const tablet = useMediaQuery(theme.breakpoints.up('sm'))
@@ -19,5 +19,3 @@ const ResponsiveButton: FC<any> = ({ children, ...props }) => {
 	}
 	return <>{button()}</>
 }
-
-export default ResponsiveButton
